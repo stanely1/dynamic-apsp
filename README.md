@@ -4,11 +4,13 @@
 - [ ] framework
     - [x] budowanie - cmake, makefile, ...
     - [ ] struktury:
-        - [ ] graph
+        - [x] graph
         - [ ] path
         - [ ] ...
     - [ ] klasa bazowa abstrakcyjna (interfejs) dla algorytmów (?)
+    - [ ] formatter (clang-format) (optional)
     - [ ] generowanie i uruchamianie testów, porówynwanie wyników
+    - [ ] unit testy na poprawność (?) (klas graph, path, ...)
 - [ ] brute
     - [ ] Floyd-Warshall (O(n^3))
     - [ ] Dijkstra (z std::priority_queue)

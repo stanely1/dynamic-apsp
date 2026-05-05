@@ -53,4 +53,16 @@ void Graph::updateEdgeWeight(Vertex from, Vertex to, double w)
     weight = w;
 }
 
+void Graph::updateVertex(Vertex v, const WeightUpdateMap& in, const WeightUpdateMap& out)
+{
+    for (const auto& [u, w] : in)
+    {
+        updateEdgeWeight(u, v, w);
+    }
+    for (const auto& [u, w] : out)
+    {
+        updateEdgeWeight(v, u, w);
+    }
+}
+
 } // namespace apsp::common
