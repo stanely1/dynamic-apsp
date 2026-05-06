@@ -1,7 +1,17 @@
+#include <algorithms/FloydWarshallAlgorithm.hpp>
 #include <common/Graph.hpp>
 #include <common/Path.hpp>
 #include <format>
 #include <iostream>
+
+void printPath(const apsp::common::Path& path)
+{
+    for (auto x : path.getVertices())
+    {
+        std::cout << x << ' ';
+    }
+    std::cout << '\n';
+}
 
 int main()
 {
@@ -40,4 +50,26 @@ int main()
 
     std::cout << (p12.getVertices() == std::vector<apsp::common::Vertex>{}) << '\n';    // 0
     std::cout << (p12.getVertices() == std::vector<apsp::common::Vertex>{1,2}) << '\n'; // 1
+
+    std::cout << std::format("|p22|={}, |p12|={}\n", p22.weight, p12.weight);
+    printPath(p12);
+    printPath(p22);
+
+    auto fwAlg{apsp::algorithms::FloydWarshallAlgorithm(10)};
+    fwAlg.update(7, in, out);
+
+    for (apsp::common::Vertex u{6}; u <= 9; ++u)
+    {
+        for (apsp::common::Vertex v{6}; v <= 9; ++v)
+        {
+            auto d{fwAlg.distance(u, v)};
+            auto p{fwAlg.path(u, v)};
+
+            std::cout << std::format("d({},{})={}\n", u, v, d);
+            std::cout << std::format("w({},{})={}\n", u, v, p->weight);
+            std::cout << std::format("p({},{}): ", u, v);
+            printPath(*p);
+            std::cout << '\n';
+        }
+    }
 }

@@ -5,14 +5,14 @@
     - [x] budowanie - cmake, makefile, ...
     - [ ] struktury:
         - [x] graph
-        - [ ] path
+        - [x] path
         - [ ] ...
-    - [ ] klasa bazowa abstrakcyjna (interfejs) dla algorytmów (?)
+    - [x] klasa bazowa abstrakcyjna (interfejs) dla algorytmów (?)
     - [ ] formatter (clang-format) (optional)
     - [ ] generowanie i uruchamianie testów, porówynwanie wyników
     - [ ] unit testy na poprawność (?) (klas graph, path, ...)
 - [ ] brute
-    - [ ] Floyd-Warshall (O(n^3))
+    - [x] Floyd-Warshall (O(n^3))
     - [ ] Dijkstra (z std::priority_queue)
     - [ ] Dijkstra z Fibonacci Heap (optional?)
 - [ ] praca Italiano,Demetrescu

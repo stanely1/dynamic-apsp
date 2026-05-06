@@ -16,6 +16,7 @@ public:
     std::uint32_t getN() const;
     std::uint32_t getM() const;
 
+    bool hasEdge(Vertex from, Vertex to) const;
     double getEdgeWeight(Vertex from, Vertex to) const;
     void updateEdgeWeight(Vertex from, Vertex to, double w);
     void updateVertex(Vertex v, const WeightUpdateMap& in, const WeightUpdateMap& out);

@@ -7,7 +7,7 @@ namespace apsp::common
 Path::Path(Vertex start, Vertex end)
 : start{start},
   end{end},
-  weight{UNREACHABLE},
+  weight{start == end ? 0.0 : UNREACHABLE},
   leftSubpath{nullptr},
   rightSubpath{nullptr}
 {

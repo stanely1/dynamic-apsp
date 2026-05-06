@@ -7,6 +7,10 @@ namespace apsp::common
 
 Graph::Graph(std::uint32_t n) : n{n}, m{0u}, edgeWeight(n, std::vector<double>(n, UNREACHABLE))
 {
+    for (Vertex v{0u}; v < n; ++v)
+    {
+        edgeWeight[v][v] = 0.0;
+    }
 }
 
 std::uint32_t Graph::getN() const
@@ -17,6 +21,11 @@ std::uint32_t Graph::getN() const
 std::uint32_t Graph::getM() const
 {
     return m;
+}
+
+bool Graph::hasEdge(Vertex from, Vertex to) const
+{
+    return from != to and not std::isinf(getEdgeWeight(from, to));
 }
 
 double Graph::getEdgeWeight(Vertex from, Vertex to) const
@@ -31,7 +40,8 @@ double Graph::getEdgeWeight(Vertex from, Vertex to) const
 void Graph::updateEdgeWeight(Vertex from, Vertex to, double w)
 {
     // assumption: only non-negative weights are supported
-    if (from >= n or to >= n or w < 0)
+    // self-loops not allowed
+    if (from == to or from >= n or to >= n or w < 0.0)
     {
         return;
     }
