@@ -1,5 +1,6 @@
 add_library(algorithms
     FloydWarshallAlgorithm.cpp
+    DijkstraAlgorithm.cpp
 )
 
 target_include_directories(algorithms
