@@ -1,3 +1,4 @@
+#include <algorithms/DijkstraAlgorithm.hpp>
 #include <algorithms/FloydWarshallAlgorithm.hpp>
 #include <common/Graph.hpp>
 #include <common/Path.hpp>
@@ -27,8 +28,8 @@ int main()
 
     std::cout << std::format("w(1,4)={}, w(6,7)={}, w(7,6)={}\n", w1, w2, w3);
 
-    apsp::common::WeightUpdateMap in{{6, 10}, {8, 55.55}};
-    apsp::common::WeightUpdateMap out{{6, 11.1}, {8, 67}};
+    apsp::common::VertexToWeightMap in{{6, 10}, {8, 55.55}};
+    apsp::common::VertexToWeightMap out{{6, 11.1}, {8, 67}};
     g.updateVertex(7, in, out);
 
     auto w67{g.getEdgeWeight(6,7)};
@@ -55,6 +56,8 @@ int main()
     printPath(p12);
     printPath(p22);
 
+    std::cout << "FLOYD-WARSHALL\n\n";
+
     auto fwAlg{apsp::algorithms::FloydWarshallAlgorithm(10)};
     fwAlg.update(7, in, out);
 
@@ -64,6 +67,26 @@ int main()
         {
             auto d{fwAlg.distance(u, v)};
             auto p{fwAlg.path(u, v)};
+
+            std::cout << std::format("d({},{})={}\n", u, v, d);
+            std::cout << std::format("w({},{})={}\n", u, v, p->weight);
+            std::cout << std::format("p({},{}): ", u, v);
+            printPath(*p);
+            std::cout << '\n';
+        }
+    }
+
+    std::cout << "DIJKSTRA\n\n";
+
+    auto dijkstraAlg{apsp::algorithms::DijkstraAlgorithm(10)};
+    dijkstraAlg.update(7, in, out);
+
+    for (apsp::common::Vertex u{6}; u <= 9; ++u)
+    {
+        for (apsp::common::Vertex v{6}; v <= 9; ++v)
+        {
+            auto d{dijkstraAlg.distance(u, v)};
+            auto p{dijkstraAlg.path(u, v)};
 
             std::cout << std::format("d({},{})={}\n", u, v, d);
             std::cout << std::format("w({},{})={}\n", u, v, p->weight);

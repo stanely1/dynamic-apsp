@@ -13,7 +13,7 @@ public:
 
     double distance(common::Vertex from, common::Vertex to) override;
     std::shared_ptr<common::Path> path(common::Vertex from, common::Vertex to) override;
-    void update(common::Vertex v, const common::WeightUpdateMap& in, const common::WeightUpdateMap& out) override;
+    void update(common::Vertex v, const common::VertexToWeightMap& in, const common::VertexToWeightMap& out) override;
 
 private:
     common::Graph graph;

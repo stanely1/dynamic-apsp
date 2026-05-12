@@ -13,7 +13,7 @@ public:
 
     virtual double distance(common::Vertex from, common::Vertex to) = 0;
     virtual std::shared_ptr<common::Path> path(common::Vertex from, common::Vertex to) = 0;
-    virtual void update(common::Vertex v, const common::WeightUpdateMap& in, const common::WeightUpdateMap& out) = 0;
+    virtual void update(common::Vertex v, const common::VertexToWeightMap& in, const common::VertexToWeightMap& out) = 0;
 };
 
 } // namespace apsp::algorithms

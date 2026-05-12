@@ -1,5 +1,7 @@
 #include <algorithms/DijkstraAlgorithm.hpp>
 #include <common/Constants.hpp>
+#include <queue>
+#include <tuple>
 
 namespace apsp::algorithms
 {
@@ -39,7 +41,7 @@ std::shared_ptr<common::Path> DijkstraAlgorithm::path(common::Vertex from, commo
     return shortestPaths[from][to];
 }
 
-void DijkstraAlgorithm::update(common::Vertex v, const common::WeightUpdateMap& in, const common::WeightUpdateMap& out)
+void DijkstraAlgorithm::update(common::Vertex v, const common::VertexToWeightMap& in, const common::VertexToWeightMap& out)
 {
     const auto n{graph.getN()};
     if (v >= n)
@@ -57,9 +59,49 @@ void DijkstraAlgorithm::update(common::Vertex v, const common::WeightUpdateMap& 
 
 void DijkstraAlgorithm::calculateSingleSourceShortestPaths(common::Vertex source)
 {
-    // TODO: całe mięsko
-    // - pierw użyć std::priority_queue
-    // - kiedyś może doklepać FIBONACCI HEAP
+    // TODO: FIBONACCI HEAP (?)
+
+    using QueueItem = std::tuple<common::Vertex, common::Vertex, double>; // edge (u,v) and distance
+    auto cmp = [](const auto& x, const auto& y) { return std::get<double>(x) > std::get<double>(y); };
+
+    std::priority_queue<QueueItem, std::vector<QueueItem>, decltype(cmp)> pq(cmp);
+    pq.emplace(source, source, 0.0);
+
+    while (not pq.empty())
+    {
+        const auto [u, v, dist] = pq.top(); // path: source ->...-> u -> v
+        pq.pop();
+
+        auto &path{*shortestPaths[source][v]};
+        if (path.weight <= dist and v != source)
+        {
+            continue;
+        }
+
+        path.weight = dist;
+
+        if (source != v)
+        {
+            // source -> x ->...-> u -> v
+            // ^^^^^^^^^^^^^^^^^^^^^      - left
+            //           ^^^^^^^^^^^^^^^^ - right
+            //
+            // edge case: source -> v (source == u, x == v)
+
+            path.leftSubpath = shortestPaths[source][u];
+            const auto x{source == u ? v : path.leftSubpath->rightSubpath->start};
+            path.rightSubpath = shortestPaths[x][v];
+        }
+
+        // source ->...-> v -(w)-> y
+        for (const auto [y, w] : graph.getOutEdges(v))
+        {
+            if (dist + w < shortestPaths[source][y]->weight)
+            {
+                pq.emplace(v, y, dist + w);
+            }
+        }
+    }
 }
 
 } // namespace apsp::algorithms

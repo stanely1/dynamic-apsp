@@ -39,7 +39,7 @@ std::shared_ptr<common::Path> FloydWarshallAlgorithm::path(common::Vertex from, 
     return shortestPaths[from][to];
 }
 
-void FloydWarshallAlgorithm::update(common::Vertex v, const common::WeightUpdateMap& in, const common::WeightUpdateMap& out)
+void FloydWarshallAlgorithm::update(common::Vertex v, const common::VertexToWeightMap& in, const common::VertexToWeightMap& out)
 {
     const auto n{graph.getN()};
     if (v >= n)
@@ -75,12 +75,12 @@ void FloydWarshallAlgorithm::update(common::Vertex v, const common::WeightUpdate
             for (common::Vertex j{0u}; j < n; ++j)
             {
                 auto &path{*shortestPaths[i][j]};
-                auto newWeight{shortestPaths[i][k]->weight + shortestPaths[k][j]->weight};
+                const auto newWeight{shortestPaths[i][k]->weight + shortestPaths[k][j]->weight};
                 if (newWeight < path.weight)
                 {
                     path.weight = newWeight;
-                    auto i1{shortestPaths[i][k]->rightSubpath->start};
-                    auto j1{shortestPaths[k][j]->leftSubpath->end};
+                    const auto i1{shortestPaths[i][k]->rightSubpath->start};
+                    const auto j1{shortestPaths[k][j]->leftSubpath->end};
                     path.leftSubpath = shortestPaths[i][j1];
                     path.rightSubpath = shortestPaths[i1][j];
                 }

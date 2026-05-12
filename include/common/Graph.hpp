@@ -2,6 +2,7 @@
 
 #include <common/Types.hpp>
 #include <cstdint>
+#include <unordered_map>
 #include <vector>
 
 namespace apsp::common
@@ -18,12 +19,13 @@ public:
 
     bool hasEdge(Vertex from, Vertex to) const;
     double getEdgeWeight(Vertex from, Vertex to) const;
+    const VertexToWeightMap& getOutEdges(Vertex from) const;
     void updateEdgeWeight(Vertex from, Vertex to, double w);
-    void updateVertex(Vertex v, const WeightUpdateMap& in, const WeightUpdateMap& out);
+    void updateVertex(Vertex v, const VertexToWeightMap& in, const VertexToWeightMap& out);
 
 private:
     std::uint32_t n, m;
-    std::vector<std::vector<double>> edgeWeight;
+    std::vector<VertexToWeightMap> edgeWeight;
 };
 
 } // namespace apsp::common
