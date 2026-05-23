@@ -15,7 +15,7 @@
     - [x] Dijkstra (z std::priority_queue)
     - [ ] Dijkstra z Fibonacci Heap (optional?)
 - [ ] praca Italiano,Demetrescu
-    - [ ] tie breaking
+    - [x] tie breaking
     - [ ] wariant increase-only (O(n^2 logn))
     - [ ] wariant fully-dynamic
 - [ ] praca Thorup
