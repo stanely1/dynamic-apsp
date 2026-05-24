@@ -1,5 +1,7 @@
+#include <algorithms/DemetrescuItalianoAlgorithm.hpp>
 #include <algorithms/DijkstraAlgorithm.hpp>
 #include <algorithms/FloydWarshallAlgorithm.hpp>
+#include <common/Constants.hpp>
 #include <common/Graph.hpp>
 #include <common/Path.hpp>
 #include <format>
@@ -12,6 +14,18 @@ void printPath(const apsp::common::Path& path)
         std::cout << x << ' ';
     }
     std::cout << '\n';
+}
+
+void printPath(const std::shared_ptr<apsp::common::Path>& path)
+{
+    if (path)
+    {
+        printPath(*path);
+    }
+    else
+    {
+        std::cout << '\n';
+    }
 }
 
 int main()
@@ -69,9 +83,9 @@ int main()
             auto p{fwAlg.path(u, v)};
 
             std::cout << std::format("d({},{})={}\n", u, v, d);
-            std::cout << std::format("w({},{})={}\n", u, v, p->weight);
+            std::cout << std::format("w({},{})={}\n", u, v, p ? p->weight : apsp::common::UNREACHABLE);
             std::cout << std::format("p({},{}): ", u, v);
-            printPath(*p);
+            printPath(p);
             std::cout << '\n';
         }
     }
@@ -89,9 +103,29 @@ int main()
             auto p{dijkstraAlg.path(u, v)};
 
             std::cout << std::format("d({},{})={}\n", u, v, d);
-            std::cout << std::format("w({},{})={}\n", u, v, p->weight);
+            std::cout << std::format("w({},{})={}\n", u, v, p ? p->weight : apsp::common::UNREACHABLE);
             std::cout << std::format("p({},{}): ", u, v);
-            printPath(*p);
+            printPath(p);
+            std::cout << '\n';
+        }
+    }
+
+    std::cout << "DEMETRESCU-ITALIANO\n\n";
+
+    auto diAlg{apsp::algorithms::DemetrescuItalianoAlgorithm(10)};
+    diAlg.update(7, in, out);
+
+    for (apsp::common::Vertex u{6}; u <= 9; ++u)
+    {
+        for (apsp::common::Vertex v{6}; v <= 9; ++v)
+        {
+            auto d{diAlg.distance(u, v)};
+            auto p{diAlg.path(u, v)};
+
+            std::cout << std::format("d({},{})={}\n", u, v, d);
+            std::cout << std::format("w({},{})={}\n", u, v, p ? p->weight : apsp::common::UNREACHABLE);
+            std::cout << std::format("p({},{}): ", u, v);
+            printPath(p);
             std::cout << '\n';
         }
     }
