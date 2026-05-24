@@ -52,6 +52,17 @@ void DijkstraAlgorithm::update(common::Vertex v, const common::VertexToWeightMap
 
     graph.updateVertex(v, in, out);
 
+    for (common::Vertex x{0u}; x < n; ++x)
+    {
+        for (common::Vertex y{0u}; y < n; ++y)
+        {
+            auto& path{*shortestPaths[x][y]};
+            path.weight = x == y ? 0.0 : common::UNREACHABLE;
+            path.leftSubpath = nullptr;
+            path.rightSubpath = nullptr;
+        }
+    }
+
     for (common::Vertex u{0u}; u < n; ++u)
     {
         calculateSingleSourceShortestPaths(u);
@@ -90,6 +101,8 @@ void DijkstraAlgorithm::calculateSingleSourceShortestPaths(common::Vertex source
         pq.pop();
 
         auto &path{*shortestPaths[source][v]};
+        // TODO: which version is correct? if both correct, which one is faster?
+        // if (path.weight < dist)
         if (path.weight <= dist and v != source)
         {
             continue;
