@@ -22,4 +22,4 @@
     - [ ] podział na poziomy - wersja O(n^2 log^2(n))
     - [ ] optymalizacja dla grafów rzadkich - ostateczna wersja
 - [ ] w pracach jest, żeby co jakiś czas restartować strukturę od zera, żeby się amortyzowało
-- [ ] dodać możliwość inicjalizacji algorytmów dla danego grafu (a nie tylko dla pustego)
+- [x] dodać możliwość inicjalizacji algorytmów dla danego grafu (a nie tylko dla pustego)

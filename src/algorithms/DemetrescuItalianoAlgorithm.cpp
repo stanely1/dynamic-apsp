@@ -14,12 +14,27 @@ DemetrescuItalianoAlgorithm::DemetrescuItalianoAlgorithm(std::uint32_t n)
   currentTime{0u},
   lastUpdateTime(n, 0u)
 {
-    for (common::Vertex v{0u}; v < n; ++v)
+    initializeSingleVertexPaths();
+}
+
+DemetrescuItalianoAlgorithm::DemetrescuItalianoAlgorithm(const common::Graph& graph)
+: graph{graph},
+  historicalPaths(graph.getN(), std::vector<structures::PathPriorityQueue>(graph.getN())),
+  locallyHistoricalPaths(graph.getN(), std::vector<structures::PathPriorityQueue>(graph.getN())),
+  currentTime{0u},
+  lastUpdateTime(graph.getN(), 0u)
+{
+    initializeSingleVertexPaths();
+
+    const auto n{graph.getN()};
+    for (common::Vertex u{0u}; u < n; ++u)
     {
-        auto path{std::make_shared<structures::Path>(v, v)};
-        locallyHistoricalPaths[v][v].push(path);
-        historicalPaths[v][v].push(path);
+        for (common::Vertex v{0u}; v < n; ++v)
+        {
+            initializeSingleEdgePath(u, v);
+        }
     }
+    calculateLocallyHistoricalPaths();
 }
 
 double DemetrescuItalianoAlgorithm::distance(common::Vertex from, common::Vertex to)
@@ -63,6 +78,32 @@ void DemetrescuItalianoAlgorithm::update(common::Vertex v, const common::VertexT
         {
             updateImpl(u);
         }
+    }
+}
+
+void DemetrescuItalianoAlgorithm::initializeSingleVertexPaths()
+{
+    for (common::Vertex v{0u}; v < graph.getN(); ++v)
+    {
+        auto path{std::make_shared<structures::Path>(v, v)};
+        locallyHistoricalPaths[v][v].push(path);
+        historicalPaths[v][v].push(path);
+    }
+}
+
+void DemetrescuItalianoAlgorithm::initializeSingleEdgePath(common::Vertex from, common::Vertex to)
+{
+    if (graph.hasEdge(from, to))
+    {
+        auto path{std::make_shared<structures::Path>(from, to)};
+        path->weight = graph.getEdgeWeight(from, to);
+        path->id = static_cast<std::uint64_t>(graph.getN())*to + from;
+        path->leftSubpath = historicalPaths[from][from].top();
+        path->rightSubpath = historicalPaths[to][to].top();
+
+        locallyHistoricalPaths[from][to].push(path);
+        historicalPaths[to][to].top()->locallyHistoricalPreExtensions.insert(path);
+        historicalPaths[from][from].top()->locallyHistoricalPostExtensions.insert(path);
     }
 }
 
@@ -125,43 +166,23 @@ void DemetrescuItalianoAlgorithm::cleanup(common::Vertex v)
 
 void DemetrescuItalianoAlgorithm::fixup(common::Vertex v)
 {
-    // phase 1
-    const auto n{graph.getN()};
-    for (common::Vertex u{0u}; u < n; ++u)
+    // phase 1 of fixup in paper
+    for (common::Vertex u{0u}; u < graph.getN(); ++u)
     {
-        if (u == v)
-        {
-            continue;
-        }
-
-        if (graph.hasEdge(u, v))
-        {
-            auto path{std::make_shared<structures::Path>(u, v)};
-            path->weight = graph.getEdgeWeight(u, v);
-            path->id = static_cast<std::uint64_t>(n)*v + u;
-            path->leftSubpath = historicalPaths[u][u].top();
-            path->rightSubpath = historicalPaths[v][v].top();
-
-            locallyHistoricalPaths[u][v].push(path);
-            historicalPaths[v][v].top()->locallyHistoricalPreExtensions.insert(path);
-            historicalPaths[u][u].top()->locallyHistoricalPostExtensions.insert(path);
-        }
-
-        if (graph.hasEdge(v, u))
-        {
-            auto path{std::make_shared<structures::Path>(v, u)};
-            path->weight = graph.getEdgeWeight(v, u);
-            path->id = static_cast<std::uint64_t>(n)*u + v;
-            path->leftSubpath = historicalPaths[v][v].top();
-            path->rightSubpath = historicalPaths[u][u].top();
-
-            locallyHistoricalPaths[v][u].push(path);
-            historicalPaths[u][u].top()->locallyHistoricalPreExtensions.insert(path);
-            historicalPaths[v][v].top()->locallyHistoricalPostExtensions.insert(path);
-        }
+        initializeSingleEdgePath(u, v);
+        initializeSingleEdgePath(v, u);
     }
 
-    // phase 2
+    // phase 2 and 3 of fixup in paper
+    calculateLocallyHistoricalPaths();
+}
+
+// phase 2 and 3 of fixup in paper
+void DemetrescuItalianoAlgorithm::calculateLocallyHistoricalPaths()
+{
+    const auto n{graph.getN()};
+
+    // phase 2 of fixup in paper
     structures::PathPriorityQueue h{};
     for (common::Vertex x{0u}; x < n; ++x)
     {
@@ -179,7 +200,7 @@ void DemetrescuItalianoAlgorithm::fixup(common::Vertex v)
         }
     }
 
-    // phase 3
+    // phase 3 of fixup in paper
     std::vector<std::vector<bool>> wasExtracted(n, std::vector<bool>(n, false));
     while (not h.empty())
     {

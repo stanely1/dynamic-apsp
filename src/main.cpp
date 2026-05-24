@@ -119,8 +119,9 @@ int main()
 
     std::cout << "DEMETRESCU-ITALIANO\n\n";
 
-    auto diAlg{apsp::algorithms::DemetrescuItalianoAlgorithm(10)};
-    diAlg.update(7, in, out);
+    // auto diAlg{apsp::algorithms::DemetrescuItalianoAlgorithm(10)};
+    // diAlg.update(7, in, out);
+    auto diAlg{apsp::algorithms::DemetrescuItalianoAlgorithm(graph)};
 
     for (apsp::common::Vertex u{6}; u <= 9; ++u)
     {
