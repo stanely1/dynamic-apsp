@@ -10,7 +10,9 @@ namespace apsp::algorithms::structures
 
 struct Path : public common::Path
 {
-    std::uint32_t id{0u};
+    using common::Path::Path;
+
+    std::uint64_t id{0u};
 
     using PathSet = std::unordered_set<std::shared_ptr<Path>>;
     PathSet historicalPreExtensions{}; // L* in paper

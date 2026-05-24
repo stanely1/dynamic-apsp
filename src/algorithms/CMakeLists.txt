@@ -1,6 +1,7 @@
 add_subdirectory(structures)
 
 add_library(algorithms
+    DemetrescuItalianoAlgorithm.cpp
     DijkstraAlgorithm.cpp
     FloydWarshallAlgorithm.cpp
 )
