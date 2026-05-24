@@ -37,6 +37,11 @@ DemetrescuItalianoAlgorithm::DemetrescuItalianoAlgorithm(const common::Graph& gr
     calculateLocallyHistoricalPaths();
 }
 
+std::string DemetrescuItalianoAlgorithm::name()
+{
+    return "Demetrescu-Italiano";
+}
+
 double DemetrescuItalianoAlgorithm::distance(common::Vertex from, common::Vertex to)
 {
     const auto n{graph.getN()};

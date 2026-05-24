@@ -9,8 +9,11 @@ namespace apsp::algorithms
 class FloydWarshallAlgorithm : public DynamicAPSPAlgorithm
 {
 public:
+    FloydWarshallAlgorithm() = default;
     FloydWarshallAlgorithm(std::uint32_t n);
     FloydWarshallAlgorithm(const common::Graph&);
+
+    std::string name() override;
 
     double distance(common::Vertex from, common::Vertex to) override;
     std::shared_ptr<common::Path> path(common::Vertex from, common::Vertex to) override;

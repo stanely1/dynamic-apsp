@@ -17,6 +17,11 @@ DijkstraAlgorithm::DijkstraAlgorithm(const common::Graph& graph) : graph{graph}
     update(0u, {}, {});
 }
 
+std::string DijkstraAlgorithm::name()
+{
+    return "Dijkstra";
+}
+
 double DijkstraAlgorithm::distance(common::Vertex from, common::Vertex to)
 {
     const auto n{graph.getN()};

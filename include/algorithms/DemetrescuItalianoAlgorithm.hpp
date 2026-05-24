@@ -10,8 +10,11 @@ namespace apsp::algorithms
 class DemetrescuItalianoAlgorithm : public DynamicAPSPAlgorithm
 {
 public:
+    DemetrescuItalianoAlgorithm() = default;
     DemetrescuItalianoAlgorithm(std::uint32_t n);
     DemetrescuItalianoAlgorithm(const common::Graph&);
+
+    std::string name() override;
 
     double distance(common::Vertex from, common::Vertex to) override;
     std::shared_ptr<common::Path> path(common::Vertex from, common::Vertex to) override;

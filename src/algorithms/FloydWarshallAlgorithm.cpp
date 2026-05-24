@@ -15,6 +15,11 @@ FloydWarshallAlgorithm::FloydWarshallAlgorithm(const common::Graph& graph) : gra
     update(0u, {}, {});
 }
 
+std::string FloydWarshallAlgorithm::name()
+{
+    return "Floyd-Warshall";
+}
+
 double FloydWarshallAlgorithm::distance(common::Vertex from, common::Vertex to)
 {
     const auto n{graph.getN()};
