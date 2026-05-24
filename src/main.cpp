@@ -70,10 +70,16 @@ int main()
     printPath(p12);
     printPath(p22);
 
+    // ALGORITHM TESTS
+
+    apsp::common::Graph graph(10);
+    graph.updateVertex(7, in, out);
+
     std::cout << "FLOYD-WARSHALL\n\n";
 
-    auto fwAlg{apsp::algorithms::FloydWarshallAlgorithm(10)};
-    fwAlg.update(7, in, out);
+    // auto fwAlg{apsp::algorithms::FloydWarshallAlgorithm(10)};
+    // fwAlg.update(7, in, out);
+    auto fwAlg{apsp::algorithms::FloydWarshallAlgorithm(graph)};
 
     for (apsp::common::Vertex u{6}; u <= 9; ++u)
     {

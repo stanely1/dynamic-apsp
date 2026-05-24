@@ -6,17 +6,13 @@ namespace apsp::algorithms
 
 FloydWarshallAlgorithm::FloydWarshallAlgorithm(std::uint32_t n) : graph(n)
 {
-    shortestPaths.reserve(n);
-    for (common::Vertex u{0u}; u < n; ++u)
-    {
-        std::vector<std::shared_ptr<common::Path>> row{};
-        row.reserve(n);
-        for (common::Vertex v{0u}; v < n; ++v)
-        {
-            row.push_back(std::make_shared<common::Path>(u, v));
-        }
-        shortestPaths.push_back(row);
-    }
+    initializeShortestPaths();
+}
+
+FloydWarshallAlgorithm::FloydWarshallAlgorithm(const common::Graph& graph) : graph{graph}
+{
+    initializeShortestPaths();
+    update(0u, {}, {});
 }
 
 double FloydWarshallAlgorithm::distance(common::Vertex from, common::Vertex to)
@@ -49,16 +45,16 @@ void FloydWarshallAlgorithm::update(common::Vertex v, const common::VertexToWeig
 
     graph.updateVertex(v, in, out);
 
-    for (common::Vertex u{0u}; u < n; ++u)
+    for (common::Vertex x{0u}; x < n; ++x)
     {
-        for (common::Vertex v{0u}; v < n; ++v)
+        for (common::Vertex y{0u}; y < n; ++y)
         {
-            auto& path{*shortestPaths[u][v]};
-            path.weight = graph.getEdgeWeight(u, v);
-            if (graph.hasEdge(u, v))
+            auto& path{*shortestPaths[x][y]};
+            path.weight = graph.getEdgeWeight(x, y);
+            if (graph.hasEdge(x, y))
             {
-                path.leftSubpath = shortestPaths[u][u];
-                path.rightSubpath = shortestPaths[v][v];
+                path.leftSubpath = shortestPaths[x][x];
+                path.rightSubpath = shortestPaths[y][y];
             }
             else
             {
@@ -86,6 +82,22 @@ void FloydWarshallAlgorithm::update(common::Vertex v, const common::VertexToWeig
                 }
             }
         }
+    }
+}
+
+void FloydWarshallAlgorithm::initializeShortestPaths()
+{
+    const auto n{graph.getN()};
+    shortestPaths.reserve(n);
+    for (common::Vertex u{0u}; u < n; ++u)
+    {
+        std::vector<std::shared_ptr<common::Path>> row{};
+        row.reserve(n);
+        for (common::Vertex v{0u}; v < n; ++v)
+        {
+            row.push_back(std::make_shared<common::Path>(u, v));
+        }
+        shortestPaths.push_back(row);
     }
 }
 
