@@ -8,17 +8,13 @@ namespace apsp::algorithms
 
 DijkstraAlgorithm::DijkstraAlgorithm(std::uint32_t n) : graph(n)
 {
-    shortestPaths.reserve(n);
-    for (common::Vertex u{0u}; u < n; ++u)
-    {
-        std::vector<std::shared_ptr<common::Path>> row{};
-        row.reserve(n);
-        for (common::Vertex v{0u}; v < n; ++v)
-        {
-            row.push_back(std::make_shared<common::Path>(u, v));
-        }
-        shortestPaths.push_back(row);
-    }
+    initializeShortestPaths();
+}
+
+DijkstraAlgorithm::DijkstraAlgorithm(const common::Graph& graph) : graph{graph}
+{
+    initializeShortestPaths();
+    update(0u, {}, {});
 }
 
 double DijkstraAlgorithm::distance(common::Vertex from, common::Vertex to)
@@ -51,9 +47,25 @@ void DijkstraAlgorithm::update(common::Vertex v, const common::VertexToWeightMap
 
     graph.updateVertex(v, in, out);
 
-    for (common::Vertex v{0u}; v < n; ++v)
+    for (common::Vertex u{0u}; u < n; ++u)
     {
-        calculateSingleSourceShortestPaths(v);
+        calculateSingleSourceShortestPaths(u);
+    }
+}
+
+void DijkstraAlgorithm::initializeShortestPaths()
+{
+    const auto n{graph.getN()};
+    shortestPaths.reserve(n);
+    for (common::Vertex u{0u}; u < n; ++u)
+    {
+        std::vector<std::shared_ptr<common::Path>> row{};
+        row.reserve(n);
+        for (common::Vertex v{0u}; v < n; ++v)
+        {
+            row.push_back(std::make_shared<common::Path>(u, v));
+        }
+        shortestPaths.push_back(row);
     }
 }
 

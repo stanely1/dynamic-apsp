@@ -98,8 +98,9 @@ int main()
 
     std::cout << "DIJKSTRA\n\n";
 
-    auto dijkstraAlg{apsp::algorithms::DijkstraAlgorithm(10)};
-    dijkstraAlg.update(7, in, out);
+    // auto dijkstraAlg{apsp::algorithms::DijkstraAlgorithm(10)};
+    // dijkstraAlg.update(7, in, out);
+    auto dijkstraAlg{apsp::algorithms::DijkstraAlgorithm(graph)};
 
     for (apsp::common::Vertex u{6}; u <= 9; ++u)
     {
