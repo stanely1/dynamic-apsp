@@ -2,7 +2,7 @@
 #include <common/Constants.hpp>
 #include <cassert>
 
-namespace apsp::tests::generator
+namespace apsp::generator
 {
 
 TestGenerator::TestGenerator() : TestGenerator(std::random_device()())
@@ -84,4 +84,4 @@ double TestGenerator::randomDouble01()
     return std::uniform_real_distribution<double>(0.0, 1.0)(rng);
 }
 
-} // apsp::tests::generator
+} // apsp::generator

@@ -1,140 +1,101 @@
+#include <algorithms/DynamicAPSPAlgorithm.hpp>
 #include <algorithms/DemetrescuItalianoAlgorithm.hpp>
 #include <algorithms/DijkstraAlgorithm.hpp>
 #include <algorithms/FloydWarshallAlgorithm.hpp>
-#include <common/Constants.hpp>
-#include <common/Graph.hpp>
-#include <common/Path.hpp>
+#include <generator/TestGenerator.hpp>
+#include <algorithm>
+#include <cassert>
 #include <format>
 #include <iostream>
+#include <memory>
+#include <vector>
 
-void printPath(const apsp::common::Path& path)
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define RESET   "\033[0m"
+
+using namespace apsp::algorithms;
+using namespace apsp::common;
+using namespace apsp::generator;
+
+namespace
 {
-    for (auto x : path.getVertices())
-    {
-        std::cout << x << ' ';
-    }
-    std::cout << '\n';
+
+using TestInput = TestGenerator::ResultType;
+using AlgorithmList = std::vector<std::unique_ptr<DynamicAPSPAlgorithm>>;
+
+const std::string BASELINE_NAME{FloydWarshallAlgorithm().name()};
+
+AlgorithmList initializeAlgorithms(const apsp::common::Graph& graph)
+{
+    AlgorithmList result{};
+    result.push_back(std::make_unique<FloydWarshallAlgorithm>(graph));
+    result.push_back(std::make_unique<DijkstraAlgorithm>(graph));
+    result.push_back(std::make_unique<DemetrescuItalianoAlgorithm>(graph));
+
+    std::ranges::shuffle(result, std::mt19937(std::random_device()()));
+
+    return result;
 }
 
-void printPath(const std::shared_ptr<apsp::common::Path>& path)
+// Correctnes test - check if all algorithms return the same output
+bool runCorrectnessTest(const TestInput& input)
 {
-    if (path)
+    auto algorithms{initializeAlgorithms(input.graph)};
+    auto* baseline{std::ranges::find_if(algorithms, [](const auto& a){ return a->name() == BASELINE_NAME; } )->get()};
+
+    // std::cout << std::format("BASELINE: {}\n", baseline->name());
+
+    const auto n{input.graph.getN()};
+
+    for (const auto& update : input.updates)
     {
-        printPath(*path);
+        // perform update
+        for (auto& algorithm : algorithms)
+        {
+            algorithm->update(update.vertex, update.in, update.out);
+        }
+
+        // verify output
+        for (Vertex x{0u}; x < n; ++x)
+        {
+            for (Vertex y{0u}; y < n; ++y)
+            {
+                const auto baselineOutput{baseline->distance(x, y)};
+                for (auto& algorithm : algorithms)
+                {
+                    const auto algorithmOutput{algorithm->distance(x, y)};
+                    if (algorithmOutput != baselineOutput)
+                    {
+                        std::cerr << std::format(
+                            "Mismatch in output for ({}, {}):\n{} (baseline): {}\n{}: {}\n",
+                            x, y, BASELINE_NAME, baselineOutput, algorithm->name(), algorithmOutput);
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+} // namespace
+
+int main(int argc, char *argv[])
+{
+    std::cout << std::format("BASELINE: {}\n", BASELINE_NAME);
+
+    TestGenerator generator{};
+
+    std::cout << "Running test...";
+    if (runCorrectnessTest(generator.getRandomTest(10, 20, 20, 0, 20, 100)))
+    {
+        std::cout << GREEN << "PASSED\n" << RESET;
     }
     else
     {
-        std::cout << '\n';
-    }
-}
-
-int main()
-{
-    auto g{apsp::common::Graph(10)};
-    g.updateEdgeWeight(1, 4, 32);
-    g.updateEdgeWeight(6, 7, 6.7);
-
-    std::cout << std::format("n={}, m={}\n", g.getN(), g.getM());
-
-    auto w1{g.getEdgeWeight(1, 4)};
-    auto w2{g.getEdgeWeight(6, 7)};
-    auto w3{g.getEdgeWeight(7, 6)};
-
-    std::cout << std::format("w(1,4)={}, w(6,7)={}, w(7,6)={}\n", w1, w2, w3);
-
-    apsp::common::VertexToWeightMap in{{6, 10}, {8, 55.55}};
-    apsp::common::VertexToWeightMap out{{6, 11.1}, {8, 67}};
-    g.updateVertex(7, in, out);
-
-    auto w67{g.getEdgeWeight(6,7)};
-    auto w76{g.getEdgeWeight(7,6)};
-    auto w78{g.getEdgeWeight(7,8)};
-    auto w87{g.getEdgeWeight(8,7)};
-    auto w68{g.getEdgeWeight(6,8)};
-
-    std::cout << std::format("w(6,7)={}, w(7,6)={}, w(7,8)={}, w(8,7)={}, w(6,8)={}\n", w67, w76, w78, w87, w68);
-
-    apsp::common::Path p22(2,2);
-    apsp::common::Path p12(1,2);
-
-    std::cout << (p22.getVertices() == std::vector<apsp::common::Vertex>{2}) << '\n';   // 1
-    std::cout << (p12.getVertices() == std::vector<apsp::common::Vertex>{}) << '\n';    // 1
-    std::cout << (p12.getVertices() == std::vector<apsp::common::Vertex>{1,2}) << '\n'; // 0
-
-    p12.rightSubpath = std::make_shared<apsp::common::Path>(p22);
-
-    std::cout << (p12.getVertices() == std::vector<apsp::common::Vertex>{}) << '\n';    // 0
-    std::cout << (p12.getVertices() == std::vector<apsp::common::Vertex>{1,2}) << '\n'; // 1
-
-    std::cout << std::format("|p22|={}, |p12|={}\n", p22.weight, p12.weight);
-    printPath(p12);
-    printPath(p22);
-
-    // ALGORITHM TESTS
-
-    apsp::common::Graph graph(10);
-    graph.updateVertex(7, in, out);
-
-    std::cout << "FLOYD-WARSHALL\n\n";
-
-    // auto fwAlg{apsp::algorithms::FloydWarshallAlgorithm(10)};
-    // fwAlg.update(7, in, out);
-    auto fwAlg{apsp::algorithms::FloydWarshallAlgorithm(graph)};
-
-    for (apsp::common::Vertex u{6}; u <= 9; ++u)
-    {
-        for (apsp::common::Vertex v{6}; v <= 9; ++v)
-        {
-            auto d{fwAlg.distance(u, v)};
-            auto p{fwAlg.path(u, v)};
-
-            std::cout << std::format("d({},{})={}\n", u, v, d);
-            std::cout << std::format("w({},{})={}\n", u, v, p ? p->weight : apsp::common::UNREACHABLE);
-            std::cout << std::format("p({},{}): ", u, v);
-            printPath(p);
-            std::cout << '\n';
-        }
-    }
-
-    std::cout << "DIJKSTRA\n\n";
-
-    // auto dijkstraAlg{apsp::algorithms::DijkstraAlgorithm(10)};
-    // dijkstraAlg.update(7, in, out);
-    auto dijkstraAlg{apsp::algorithms::DijkstraAlgorithm(graph)};
-
-    for (apsp::common::Vertex u{6}; u <= 9; ++u)
-    {
-        for (apsp::common::Vertex v{6}; v <= 9; ++v)
-        {
-            auto d{dijkstraAlg.distance(u, v)};
-            auto p{dijkstraAlg.path(u, v)};
-
-            std::cout << std::format("d({},{})={}\n", u, v, d);
-            std::cout << std::format("w({},{})={}\n", u, v, p ? p->weight : apsp::common::UNREACHABLE);
-            std::cout << std::format("p({},{}): ", u, v);
-            printPath(p);
-            std::cout << '\n';
-        }
-    }
-
-    std::cout << "DEMETRESCU-ITALIANO\n\n";
-
-    // auto diAlg{apsp::algorithms::DemetrescuItalianoAlgorithm(10)};
-    // diAlg.update(7, in, out);
-    auto diAlg{apsp::algorithms::DemetrescuItalianoAlgorithm(graph)};
-
-    for (apsp::common::Vertex u{6}; u <= 9; ++u)
-    {
-        for (apsp::common::Vertex v{6}; v <= 9; ++v)
-        {
-            auto d{diAlg.distance(u, v)};
-            auto p{diAlg.path(u, v)};
-
-            std::cout << std::format("d({},{})={}\n", u, v, d);
-            std::cout << std::format("w({},{})={}\n", u, v, p ? p->weight : apsp::common::UNREACHABLE);
-            std::cout << std::format("p({},{}): ", u, v);
-            printPath(p);
-            std::cout << '\n';
-        }
+        std::cout << RED << "FAILED\n" << RESET;
     }
 }

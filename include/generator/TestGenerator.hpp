@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-namespace apsp::tests::generator
+namespace apsp::generator
 {
 
 class TestGenerator
@@ -43,4 +43,4 @@ private:
     RngType rng;
 };
 
-} // apsp::tests::generator
+} // apsp::generator
