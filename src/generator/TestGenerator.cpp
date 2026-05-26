@@ -9,7 +9,7 @@ TestGenerator::TestGenerator() : TestGenerator(std::random_device()())
 {
 }
 
-TestGenerator::TestGenerator(RngType::result_type seed) : rng(seed)
+TestGenerator::TestGenerator(RngSeed seed) : rng(seed)
 {
 }
 

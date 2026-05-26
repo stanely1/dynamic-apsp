@@ -10,10 +10,11 @@ namespace apsp::generator
 class TestGenerator
 {
 public:
-    using RngType = std::mt19937;
+    using Rng = std::mt19937;
+    using RngSeed = Rng::result_type;
 
     TestGenerator();
-    TestGenerator(RngType::result_type seed);
+    TestGenerator(RngSeed seed);
 
     struct ResultType
     {
@@ -40,7 +41,7 @@ public:
 private:
     double randomDouble01();
 
-    RngType rng;
+    Rng rng;
 };
 
 } // apsp::generator
