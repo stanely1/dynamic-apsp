@@ -4,6 +4,9 @@
 #include <bit>
 #include <queue>
 
+// #include <iostream>
+// #include <format>
+
 namespace apsp::algorithms
 {
 
@@ -35,6 +38,23 @@ DemetrescuItalianoAlgorithm::DemetrescuItalianoAlgorithm(const common::Graph& gr
         }
     }
     calculateLocallyHistoricalPaths();
+
+    // for (common::Vertex u{0u}; u < n; ++u)
+    // {
+    //     updateImpl(u);
+    // }
+
+    // std::cerr << "ALGORITHM SHORTEST PATHS:\n";
+    // for (common::Vertex x{0u}; x < n; ++x)
+    // {
+    //     std::cerr << x << ": ";
+    //     for (common::Vertex y{0u}; y < n; ++y)
+    //     {
+    //         std::cerr << distance(x, y) << ' ';
+    //     }
+    //     std::cerr << '\n';
+    // }
+    // std::cerr << '\n';
 }
 
 std::string DemetrescuItalianoAlgorithm::name()
@@ -73,6 +93,7 @@ void DemetrescuItalianoAlgorithm::update(common::Vertex v, const common::VertexT
 
     lastUpdateTime[v] = ++currentTime;
     graph.updateVertex(v, in, out);
+    // std::cerr << "RUNNING MAIN UPDATE: " << v << "\n";
     updateImpl(v);
 
     // smoothing
@@ -81,9 +102,22 @@ void DemetrescuItalianoAlgorithm::update(common::Vertex v, const common::VertexT
         const auto tu{lastUpdateTime[u]};
         if (tu > 0u and std::has_single_bit(currentTime - tu))
         {
+            // std::cerr << "running smoothing update: " << u << ", tu: " << tu << ", time: " << currentTime << '\n';
             updateImpl(u);
         }
     }
+
+    // std::cerr << "ALGORITHM SHORTEST PATHS:\n";
+    // for (common::Vertex x{0u}; x < n; ++x)
+    // {
+    //     std::cerr << x << ": ";
+    //     for (common::Vertex y{0u}; y < n; ++y)
+    //     {
+    //         std::cerr << distance(x, y) << ' ';
+    //     }
+    //     std::cerr << '\n';
+    // }
+    // std::cerr << '\n';
 }
 
 void DemetrescuItalianoAlgorithm::initializeSingleVertexPaths()
@@ -109,6 +143,8 @@ void DemetrescuItalianoAlgorithm::initializeSingleEdgePath(common::Vertex from, 
         locallyHistoricalPaths[from][to].push(path);
         historicalPaths[to][to].top()->locallyHistoricalPreExtensions.insert(path);
         historicalPaths[from][from].top()->locallyHistoricalPostExtensions.insert(path);
+
+        // std::cerr << std::format("initialized edge ({}, {}) with weight {}, id: {}\n", path->start, path->end, path->weight, path->id);
     }
 }
 
@@ -135,6 +171,8 @@ void DemetrescuItalianoAlgorithm::cleanup(common::Vertex v)
             const auto p{*it};
             q.push(p);
 
+            // std::cerr << std::format("cleanup of path ({}, {}) (pre-extension of ({}, {}))\n", p->start, p->end, path->start, path->end);
+
             // remove from all structures
             locallyHistoricalPaths[p->start][p->end].erase(p); // P_xy
             it = preExtensions.erase(it); // L(r(p))
@@ -153,6 +191,8 @@ void DemetrescuItalianoAlgorithm::cleanup(common::Vertex v)
         {
             const auto p{*it};
             q.push(p);
+
+            // std::cerr << std::format("cleanup of path ({}, {}) (post-extension of ({}, {}))\n", p->start, p->end, path->start, path->end);
 
             // remove from all structures
             locallyHistoricalPaths[p->start][p->end].erase(p); // P_xy
@@ -200,6 +240,7 @@ void DemetrescuItalianoAlgorithm::calculateLocallyHistoricalPaths()
 
             if (not locallyHistoricalPaths[x][y].empty())
             {
+                // std::cerr << std::format("adding path ({}, {}) with weight {} to H\n", x, y, locallyHistoricalPaths[x][y].top()->weight);
                 h.push(locallyHistoricalPaths[x][y].top());
             }
         }
@@ -207,6 +248,7 @@ void DemetrescuItalianoAlgorithm::calculateLocallyHistoricalPaths()
 
     // phase 3 of fixup in paper
     std::vector<std::vector<bool>> wasExtracted(n, std::vector<bool>(n, false));
+    // std::vector<std::vector<bool>> wasExtracted(n, std::vector<bool>(n, false));
     while (not h.empty())
     {
         auto path{h.top()};
@@ -215,8 +257,14 @@ void DemetrescuItalianoAlgorithm::calculateLocallyHistoricalPaths()
         const auto x{path->start};
         const auto y{path->end};
 
-        if (wasExtracted[x][y])
+        // std::cerr << std::format("extracting path ({}, {}) with weight {} from H\n", x, y, path->weight);
+
+        // If path for this pair of vertices was already extracted, compare extended weight.
+        // The idea is to keep all paths with the same extended weight, as they might yield
+        // different pre/post extensions. Keeping only one of them may cause some paths never be found.
+        if (wasExtracted[x][y] and historicalPaths[x][y].top()->extendedWeight() < path->extendedWeight())
         {
+            // std::cerr << "a path was already extracted for this pair, skipping\n";
             continue;
         }
 
@@ -224,6 +272,7 @@ void DemetrescuItalianoAlgorithm::calculateLocallyHistoricalPaths()
 
         if (historicalPaths[x][y].contains(path))
         {
+            // std::cerr << "this path is already present in P* for this pair, skipping\n";
             continue;
         }
 
@@ -236,12 +285,19 @@ void DemetrescuItalianoAlgorithm::calculateLocallyHistoricalPaths()
 
         for (const auto& preExtension : lPath->historicalPreExtensions)
         {
-            auto newX{preExtension->start};
+            const auto newX{preExtension->start};
+            if (newX == y)
+            {
+                continue;
+            }
+
             auto newPath{std::make_shared<structures::Path>(newX, y)};
             newPath->weight = graph.getEdgeWeight(newX, x) + path->weight;
             newPath->id = std::max(preExtension->id, path->id);
             newPath->leftSubpath = preExtension;
             newPath->rightSubpath = path;
+
+            // std::cerr << std::format("adding new path ({}, {}) with weight {} (pre-extension of ({}, {}))\n", newX, y, newPath->weight, path->start, path->end);
 
             locallyHistoricalPaths[newX][y].push(newPath);
             path->locallyHistoricalPreExtensions.insert(newPath);
@@ -251,12 +307,19 @@ void DemetrescuItalianoAlgorithm::calculateLocallyHistoricalPaths()
 
         for (const auto& postExtension : rPath->historicalPostExtensions)
         {
-            auto newY{postExtension->end};
+            const auto newY{postExtension->end};
+            if (x == newY)
+            {
+                continue;
+            }
+
             auto newPath{std::make_shared<structures::Path>(x, newY)};
             newPath->weight = path->weight + graph.getEdgeWeight(y, newY);
             newPath->id = std::max(path->id, postExtension->id);
             newPath->leftSubpath = path;
             newPath->rightSubpath = postExtension;
+
+            // std::cerr << std::format("adding new path ({}, {}) with weight {} (post-extension of ({}, {}))\n", x, newY, newPath->weight, path->start, path->end);
 
             locallyHistoricalPaths[x][newY].push(newPath);
             postExtension->locallyHistoricalPreExtensions.insert(newPath);

@@ -1,4 +1,5 @@
 add_library(structures
+    Path.cpp
     PathPriorityQueue.cpp
 )
 

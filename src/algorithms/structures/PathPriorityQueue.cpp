@@ -38,13 +38,11 @@ void PathPriorityQueue::erase(const std::shared_ptr<Path>& path)
 
 bool PathPriorityQueue::PathComparator::operator()(const std::shared_ptr<Path>& x, const std::shared_ptr<Path>& y) const
 {
-    if (x->weight != y->weight)
+    const auto xew{x->extendedWeight()};
+    const auto yew{y->extendedWeight()};
+    if (xew != yew)
     {
-        return x->weight < y->weight;
-    }
-    else if (x->id != y->id)
-    {
-        return x->id < y->id;
+        return xew < yew;
     }
     else
     {

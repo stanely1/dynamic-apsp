@@ -11,6 +11,9 @@ namespace apsp::algorithms::structures
 struct Path : public common::Path
 {
     using common::Path::Path;
+    using ExtendedWeight = std::pair<double, std::uint64_t>;
+
+    ExtendedWeight extendedWeight() const;
 
     std::uint64_t id{0u};
 
