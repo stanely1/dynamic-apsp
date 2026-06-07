@@ -139,33 +139,32 @@ bool runCorrectnessTests(const std::optional<TestGenerator::RngSeed>& seed)
 
     auto generator{seed.has_value() ? TestGenerator(seed.value()) : TestGenerator{}};
 
+    int ntestsTotal{0};
+    int passedTotal{0};
 
+    std::cout << "Random undirected trees (n=20, updates=50)\n";
+    constexpr int ntestsTree{100};
+    int passedTree{0};
+    for (int i{1}; i <= ntestsTree; ++i)
+    {
+        std::cout << std::format("running test {}/{}...", i, ntestsTree);
+        passedTree += runCorrectnessTest(generator.getRandomUndirectedTree(20, 50, 0, 20, 0, 100));
+    }
+    std::cout << std::format("{}/{} tests passed\n", passedTree, ntestsTree);
+    ntestsTotal += ntestsTree;
+    passedTotal += passedTree;
 
     std::cout << "Small random graphs (n=10, m=25, updates=20)\n";
-    // constexpr int ntestsSmall{10000};
-    constexpr int ntestsSmall{0};
+    constexpr int ntestsSmall{10000};
     int passedSmall{0};
     for (int i{1}; i <= ntestsSmall; ++i)
     {
         std::cout << std::format("running test {}/{}...", i, ntestsSmall);
-        passedSmall += runCorrectnessTest(generator.getRandomTest(10, 25, 20, 0, 10, 100));
-
-        // TODO: debug this test
-        // TestInput input{};
-        // input.graph = Graph(5);
-        // input.graph.updateVertex(0, {}, {{1, 5}, {3, 68}});
-        // input.graph.updateVertex(1, {}, {});
-        // input.graph.updateVertex(2, {}, {{0, 90}, {1, 46}, {4, 6}});
-        // input.graph.updateVertex(3, {}, {{4, 73}});
-        // input.graph.updateVertex(4, {}, {{0, 18}, {2, 22}});
-        // input.updates = {{
-        //      .vertex = 0,
-        //      .in  = {{4, 15}, {2, 77}},
-        //      .out = {{4, 18}, {1, 70}, {2, 7}}
-        //     }};
-        // passed += runCorrectnessTest(input);
+        passedSmall += runCorrectnessTest(generator.getRandomTest(10, 25, 20, 0, 10, 0, 100));
     }
     std::cout << std::format("{}/{} tests passed\n", passedSmall, ntestsSmall);
+    ntestsTotal += ntestsSmall;
+    passedTotal += passedSmall;
 
     std::cout << "Big random graphs (n=50, m=500, updates=200)\n";
     constexpr int ntestsBig{100};
@@ -176,12 +175,33 @@ bool runCorrectnessTests(const std::optional<TestGenerator::RngSeed>& seed)
         passedBig += runCorrectnessTest(generator.getRandomTest(50, 500, 200, 0, 50));
     }
     std::cout << std::format("{}/{} tests passed\n", passedBig, ntestsBig);
+    ntestsTotal += ntestsBig;
+    passedTotal += passedBig;
 
-    // TODO: non-random tests (e.g. bad examples from paper)
+    std::cout << "Clique with all equal weights (n=20, weight=1)\n";
+    ntestsTotal += 1;
+    passedTotal += runCorrectnessTest(generator.getEqualWeightClique(20, 2, 0, 10, 1));
 
+    std::cout << "Random clique with all almost equal weights (n=20, weights in {1, 2})\n";
+    ntestsTotal += 1;
+    passedTotal += runCorrectnessTest(generator.getRandomClique(20, 50, 0, 10, 1, 2));
 
-    constexpr int ntestsTotal{ntestsSmall + ntestsBig};
-    const int passedTotal{passedSmall + passedBig};
+    std::cout << "Counterexample for non-unique shortest paths from paper (figure 3)\n";
+    ntestsTotal += 1;
+    passedTotal += runCorrectnessTest(generator.getNonUniqueShortestPathsCounterexampleFromPaper());
+
+    std::cout << "Counterexample for non-unique extended weight\n";
+    ntestsTotal += 1;
+    passedTotal += runCorrectnessTest(generator.getEqualExtendedWeightCounterexample());
+
+    std::cout << "Pathological case triggering n^3 changes in locally shortest paths from paper (figure 4) (layer size=20, updates=20)\n";
+    ntestsTotal += 1;
+    passedTotal += runCorrectnessTest(generator.getPathologicalTestForLocallyShortestPathsFromPaper(20, 20));
+
+    std::cout << "Worst-case instance with n^3 historical paths from paper (figure 6) (layer size=20)\n";
+    ntestsTotal += 1;
+    passedTotal += runCorrectnessTest(generator.getWorstCaseTestForHistoricalPathsFromPaper(20));
+
     std::cout << std::format("{}/{} tests passed in total\n", passedTotal, ntestsTotal);
 
     return passedTotal == ntestsTotal;
@@ -197,6 +217,9 @@ bool runPerformanceBenchmarks()
     // TODO: non-random tests (e.g. bad examples from paper)
     // - te co mają być wolne
     // - takie gdzie będzie dużo ścieżek tej samej wagi (np klika z wszystkimi wagami równymi)
+    // - te wszystkie co są już w correctness (z wyjątkiem tych malych)
+
+    return true;
 }
 
 void printUsage(const std::string& arg)

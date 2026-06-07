@@ -35,8 +35,42 @@ public:
         std::uint32_t numUpdates = 1000u,
         std::uint32_t minEdgesPerUpdate = 0u,
         std::uint32_t maxEdgesPerUpdate = 100u,
+        double minEdgeWeight = 0.0,
         double maxEdgeWeight = 1e6,
         double edgeDeleteProbability = 0.2);
+
+    ResultType getRandomUndirectedTree(
+        std::uint32_t n = 100u,
+        std::uint32_t numUpdates = 1000u,
+        std::uint32_t minEdgesPerUpdate = 0u,
+        std::uint32_t maxEdgesPerUpdate = 100u,
+        double minEdgeWeight = 0.0,
+        double maxEdgeWeight = 1e6);
+
+    ResultType getRandomClique(
+        std::uint32_t n = 100u,
+        std::uint32_t numUpdates = 1000u,
+        std::uint32_t minEdgesPerUpdate = 0u,
+        std::uint32_t maxEdgesPerUpdate = 100u,
+        double minEdgeWeight = 0.0,
+        double maxEdgeWeight = 1e6);
+
+    ResultType getEqualWeightClique(
+        std::uint32_t n = 100u,
+        std::uint32_t numUpdates = 100u,
+        std::uint32_t minEdgesPerUpdate = 0u,
+        std::uint32_t maxEdgesPerUpdate = 100u,
+        double edgeWeight = 1.0);
+
+    ResultType getNonUniqueShortestPathsCounterexampleFromPaper();
+
+    ResultType getEqualExtendedWeightCounterexample();
+
+    ResultType getPathologicalTestForLocallyShortestPathsFromPaper(
+        std::uint32_t layerSize = 100u,
+        std::uint32_t numUpdates = 100u);
+
+    ResultType getWorstCaseTestForHistoricalPathsFromPaper(std::uint32_t layerSize = 100u);
 
 private:
     double randomDouble01();
