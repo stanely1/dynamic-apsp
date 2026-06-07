@@ -5,6 +5,7 @@
 #include <generator/TestGenerator.hpp>
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <format>
 #include <iomanip>
 #include <iostream>
@@ -38,7 +39,9 @@ AlgorithmList initializeAlgorithms(const apsp::common::Graph& graph)
     result.push_back(std::make_unique<DijkstraAlgorithm>(graph));
     result.push_back(std::make_unique<DemetrescuItalianoAlgorithm>(graph));
 
-    std::ranges::shuffle(result, std::mt19937(std::random_device()()));
+    static std::random_device rd;
+    static std::mt19937 rng(rd());
+    std::ranges::shuffle(result, rng);
 
     return result;
 }
@@ -95,7 +98,6 @@ bool verifyOutput(const int updateNum, const TestInput& input, const AlgorithmLi
                                     "Mismatch in output for ({}, {}) after update {}:\n{} (baseline): {}\n{}: {}\n",
                                     x, y, updateNum, BASELINE_NAME, baselineOutput, algorithm->name(), algorithmOutput);
                     printInput(input);
-                    exit(EXIT_FAILURE); // TODO: remove
                     return false;
                 }
             }
@@ -207,19 +209,123 @@ bool runCorrectnessTests(const std::optional<TestGenerator::RngSeed>& seed)
     return passedTotal == ntestsTotal;
 }
 
-bool runPerformanceBenchmarks()
+void runPerformanceBenchmark(const TestInput& input)
 {
-    // TODO:
-    // - random tests with different graph density
-    // - specific graph types (trees/clique/...)
-    // - ...?
+    assert(input.updates.size() > 0);
 
-    // TODO: non-random tests (e.g. bad examples from paper)
-    // - te co mają być wolne
-    // - takie gdzie będzie dużo ścieżek tej samej wagi (np klika z wszystkimi wagami równymi)
-    // - te wszystkie co są już w correctness (z wyjątkiem tych malych)
+    auto algorithms{initializeAlgorithms(input.graph)};
 
-    return true;
+    // time measured in milliseconds (ms)
+    std::unordered_map<std::string, std::vector<double>> updateTimes{};
+    for (const auto& algorithm : algorithms)
+    {
+        updateTimes[algorithm->name()].reserve(input.updates.size());
+    }
+
+    for (auto& algorithm : algorithms)
+    {
+        const auto algName{algorithm->name()};
+        for (const auto& update : input.updates)
+        {
+            const auto start{std::chrono::steady_clock::now()};
+            algorithm->update(update.vertex, update.in, update.out);
+            const auto end{std::chrono::steady_clock::now()};
+
+            updateTimes[algName].push_back(std::chrono::duration<double, std::milli>(end - start).count());
+        }
+    }
+
+    for (const auto& [algName, algTimes] : updateTimes)
+    {
+        const auto [minTime, maxTime]{std::ranges::minmax(algTimes)};
+        const auto avgTime{std::accumulate(algTimes.begin(), algTimes.end(), 0.0) / algTimes.size()};
+        std::cerr << std::format("{}: min: {:.4f}, max: {:.4f}, avg: {:.4f} [ms]\n", algName, minTime, maxTime, avgTime);
+        std::cout << std::format("{}: min: {:.4f}, max: {:.4f}, avg: {:.4f} [ms]\n", algName, minTime, maxTime, avgTime);
+    }
+}
+
+void runPerformanceBenchmarks(const std::optional<TestGenerator::RngSeed>& seed)
+{
+    std::cout << std::format("BASELINE: {}\nMeasuring time per update\n\n", BASELINE_NAME);
+
+    auto generator{seed.has_value() ? TestGenerator(seed.value()) : TestGenerator{}};
+
+    std::cerr << "Random undirected trees\n";
+    std::cout << "Random undirected trees\n";
+    for (std::uint32_t n{10u}; n <= 150u; n+=10)
+    {
+        std::cerr << std::format("n={}:\n", n);
+        std::cout << std::format("n={}:\n", n);
+        runPerformanceBenchmark(generator.getRandomUndirectedTree(n, 100, 0, n));
+    }
+    std::cerr << '\n';
+    std::cout << '\n';
+
+    std::cerr << "Random graphs with m = O(n)\n";
+    std::cout << "Random graphs with m = O(n)\n";
+    for (std::uint32_t n{10u}; n <= 150u; n+=10)
+    {
+        std::cerr << std::format("n={}:\n", n);
+        std::cout << std::format("n={}:\n", n);
+        runPerformanceBenchmark(generator.getRandomTest(n, 5*n, 100, 0, 5));
+    }
+    std::cerr << '\n';
+    std::cout << '\n';
+
+    std::cerr << "Random graphs with n=100 and growing density (m)\n";
+    std::cout << "Random graphs with n=100 and growing density (m)\n";
+    for (std::uint32_t m{45u}; m <= 4950u; m+=327)
+    {
+        std::cerr << std::format("m={} ({:.0f}\% full):\n", m, static_cast<double>(m)/4950*100);
+        std::cout << std::format("m={} ({:.0f}\% full):\n", m, static_cast<double>(m)/4950*100);
+        runPerformanceBenchmark(generator.getRandomTest(100, m, 100, 0, 3*m/100));
+    }
+    std::cerr << '\n';
+    std::cout << '\n';
+
+    std::cerr << "Clique with all equal weights (weight=1)\n";
+    std::cout << "Clique with all equal weights (weight=1)\n";
+    for (std::uint32_t n{10u}; n <= 100u; n+=10)
+    {
+        std::cerr << std::format("n={}:\n", n);
+        std::cout << std::format("n={}:\n", n);
+        runPerformanceBenchmark(generator.getEqualWeightClique(n, 100, 0, n, 1));
+    }
+    std::cerr << '\n';
+    std::cout << '\n';
+
+    std::cerr << "Random clique with all almost equal weights (weights in {1, 2})\n";
+    std::cout << "Random clique with all almost equal weights (weights in {1, 2})\n";
+    for (std::uint32_t n{10u}; n <= 100u; n+=10)
+    {
+        std::cerr << std::format("n={}:\n", n);
+        std::cout << std::format("n={}:\n", n);
+        runPerformanceBenchmark(generator.getRandomClique(n, 100, 0, n, 1, 2));
+    }
+    std::cerr << '\n';
+    std::cout << '\n';
+
+    std::cerr << "Pathological case triggering n^3 changes in locally shortest paths from paper (figure 4)\n";
+    std::cout << "Pathological case triggering n^3 changes in locally shortest paths from paper (figure 4)\n";
+    for (std::uint32_t n{10u}; n <= 100u; n+=10)
+    {
+        std::cerr << std::format("layer size={}:\n", n);
+        std::cout << std::format("layer size={}:\n", n);
+        runPerformanceBenchmark(generator.getPathologicalTestForLocallyShortestPathsFromPaper(n, 100));
+    }
+    std::cerr << '\n';
+    std::cout << '\n';
+
+    std::cerr << "Worst-case instance with n^3 historical paths from paper (figure 6)\n";
+    std::cout << "Worst-case instance with n^3 historical paths from paper (figure 6)\n";
+    for (std::uint32_t n{10u}; n <= 70u; n+=10)
+    {
+        std::cerr << std::format("layer size={}:\n", n);
+        std::cout << std::format("layer size={}:\n", n);
+        runPerformanceBenchmark(generator.getWorstCaseTestForHistoricalPathsFromPaper(n));
+    }
+    std::cerr << '\n';
+    std::cout << '\n';
 }
 
 void printUsage(const std::string& arg)
@@ -282,8 +388,8 @@ int main(int argc, char *argv[])
     }
     else if (mode == BENCH_MODE)
     {
-        // TODO
-        // run performance benchmarks
+        runPerformanceBenchmarks(seed);
+        return EXIT_SUCCESS;
     }
     else
     {

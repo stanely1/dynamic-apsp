@@ -1,0 +1,348 @@
+BASELINE: Floyd-Warshall
+Measuring time per update
+
+Random undirected trees
+n=10:
+Floyd-Warshall: min: 0.0363, max: 0.0429, avg: 0.0372 [ms]
+Demetrescu-Italiano: min: 0.1708, max: 1.1455, avg: 0.7272 [ms]
+Dijkstra: min: 0.0556, max: 0.1090, avg: 0.0642 [ms]
+n=20:
+Dijkstra: min: 0.2470, max: 0.3848, avg: 0.3344 [ms]
+Demetrescu-Italiano: min: 0.5327, max: 4.6822, avg: 3.0842 [ms]
+Floyd-Warshall: min: 0.2229, max: 0.3162, avg: 0.2308 [ms]
+n=30:
+Dijkstra: min: 0.6104, max: 0.6436, avg: 0.6277 [ms]
+Demetrescu-Italiano: min: 1.2313, max: 11.6333, avg: 6.4213 [ms]
+Floyd-Warshall: min: 0.6766, max: 0.8159, avg: 0.6937 [ms]
+n=40:
+Demetrescu-Italiano: min: 2.0943, max: 19.8928, avg: 12.2125 [ms]
+Dijkstra: min: 1.1292, max: 1.2153, avg: 1.1561 [ms]
+Floyd-Warshall: min: 1.5132, max: 1.6343, avg: 1.5314 [ms]
+n=50:
+Floyd-Warshall: min: 2.8876, max: 3.1394, avg: 2.9069 [ms]
+Demetrescu-Italiano: min: 4.7636, max: 35.9316, avg: 21.0279 [ms]
+Dijkstra: min: 1.8137, max: 2.1117, avg: 1.8754 [ms]
+n=60:
+Floyd-Warshall: min: 4.9596, max: 5.4635, avg: 5.0239 [ms]
+Dijkstra: min: 2.6557, max: 2.7703, avg: 2.6990 [ms]
+Demetrescu-Italiano: min: 4.0807, max: 38.7537, avg: 26.8846 [ms]
+n=70:
+Floyd-Warshall: min: 7.8002, max: 8.1084, avg: 7.8624 [ms]
+Demetrescu-Italiano: min: 12.1794, max: 65.6204, avg: 40.9459 [ms]
+Dijkstra: min: 3.6249, max: 4.0567, avg: 3.7324 [ms]
+n=80:
+Demetrescu-Italiano: min: 8.8804, max: 91.0131, avg: 54.5607 [ms]
+Dijkstra: min: 4.8124, max: 5.2754, avg: 4.9331 [ms]
+Floyd-Warshall: min: 11.8281, max: 12.4290, avg: 11.9013 [ms]
+n=90:
+Floyd-Warshall: min: 16.9103, max: 17.5546, avg: 16.9983 [ms]
+Demetrescu-Italiano: min: 13.5304, max: 99.4341, avg: 68.7403 [ms]
+Dijkstra: min: 6.1248, max: 7.0190, avg: 6.2583 [ms]
+n=100:
+Floyd-Warshall: min: 23.2260, max: 24.8375, avg: 23.4818 [ms]
+Demetrescu-Italiano: min: 15.5463, max: 138.5573, avg: 86.5503 [ms]
+Dijkstra: min: 7.7427, max: 8.1532, avg: 7.9007 [ms]
+n=110:
+Floyd-Warshall: min: 31.1113, max: 32.5029, avg: 31.2834 [ms]
+Dijkstra: min: 9.7527, max: 10.7611, avg: 9.9658 [ms]
+Demetrescu-Italiano: min: 18.9749, max: 166.1635, avg: 109.2395 [ms]
+n=120:
+Floyd-Warshall: min: 40.4292, max: 42.1352, avg: 40.6035 [ms]
+Demetrescu-Italiano: min: 27.1105, max: 191.1222, avg: 128.7483 [ms]
+Dijkstra: min: 12.1809, max: 14.3879, avg: 12.3471 [ms]
+n=130:
+Floyd-Warshall: min: 51.7347, max: 53.8294, avg: 52.0912 [ms]
+Dijkstra: min: 14.0778, max: 15.2109, avg: 14.3064 [ms]
+Demetrescu-Italiano: min: 21.6352, max: 245.1377, avg: 155.6124 [ms]
+n=140:
+Dijkstra: min: 16.3925, max: 18.4133, avg: 16.5425 [ms]
+Demetrescu-Italiano: min: 35.9153, max: 285.8777, avg: 185.0952 [ms]
+Floyd-Warshall: min: 65.2335, max: 67.1254, avg: 65.6923 [ms]
+n=150:
+Demetrescu-Italiano: min: 35.3877, max: 368.8487, avg: 229.1131 [ms]
+Floyd-Warshall: min: 80.2477, max: 82.1329, avg: 80.5881 [ms]
+Dijkstra: min: 19.5377, max: 22.6174, avg: 19.8722 [ms]
+
+Random graphs with m = O(n)
+n=10:
+Floyd-Warshall: min: 0.0407, max: 0.0612, avg: 0.0437 [ms]
+Demetrescu-Italiano: min: 0.4025, max: 1.8466, avg: 1.0280 [ms]
+Dijkstra: min: 0.1846, max: 0.4005, avg: 0.2563 [ms]
+n=20:
+Floyd-Warshall: min: 0.2484, max: 0.3016, avg: 0.2718 [ms]
+Dijkstra: min: 0.6501, max: 1.9912, avg: 1.4440 [ms]
+Demetrescu-Italiano: min: 0.8815, max: 6.3122, avg: 4.0542 [ms]
+n=30:
+Demetrescu-Italiano: min: 1.8444, max: 13.5495, avg: 8.9002 [ms]
+Dijkstra: min: 1.7980, max: 5.4396, avg: 3.5477 [ms]
+Floyd-Warshall: min: 0.7915, max: 0.9859, avg: 0.8472 [ms]
+n=40:
+Floyd-Warshall: min: 1.8214, max: 2.0209, avg: 1.9206 [ms]
+Demetrescu-Italiano: min: 4.3009, max: 24.0756, avg: 15.7924 [ms]
+Dijkstra: min: 3.4741, max: 8.4797, avg: 5.8858 [ms]
+n=50:
+Floyd-Warshall: min: 3.4654, max: 4.4344, avg: 3.6826 [ms]
+Dijkstra: min: 5.1118, max: 13.4178, avg: 9.1410 [ms]
+Demetrescu-Italiano: min: 4.7720, max: 35.5037, avg: 25.0246 [ms]
+n=60:
+Floyd-Warshall: min: 6.1567, max: 10.0791, avg: 6.8758 [ms]
+Demetrescu-Italiano: min: 7.9925, max: 64.5665, avg: 38.1035 [ms]
+Dijkstra: min: 7.8539, max: 19.4768, avg: 13.2050 [ms]
+n=70:
+Dijkstra: min: 10.7384, max: 23.2526, avg: 16.1994 [ms]
+Floyd-Warshall: min: 9.7268, max: 14.5664, avg: 10.6209 [ms]
+Demetrescu-Italiano: min: 10.6920, max: 94.9664, avg: 57.6361 [ms]
+n=80:
+Floyd-Warshall: min: 14.5368, max: 16.2454, avg: 14.9106 [ms]
+Demetrescu-Italiano: min: 15.9769, max: 93.6807, avg: 69.7941 [ms]
+Dijkstra: min: 14.5595, max: 29.9851, avg: 22.3271 [ms]
+n=90:
+Dijkstra: min: 19.4969, max: 34.7312, avg: 27.1654 [ms]
+Demetrescu-Italiano: min: 17.7436, max: 120.5965, avg: 86.9123 [ms]
+Floyd-Warshall: min: 19.9951, max: 21.9565, avg: 20.5962 [ms]
+n=100:
+Demetrescu-Italiano: min: 20.6874, max: 148.1826, avg: 103.4285 [ms]
+Floyd-Warshall: min: 27.5600, max: 30.5938, avg: 28.5116 [ms]
+Dijkstra: min: 22.5193, max: 39.3824, avg: 31.0340 [ms]
+n=110:
+Demetrescu-Italiano: min: 18.1118, max: 176.5700, avg: 128.0437 [ms]
+Dijkstra: min: 27.8236, max: 46.2069, avg: 36.9782 [ms]
+Floyd-Warshall: min: 36.1149, max: 37.7739, avg: 36.4959 [ms]
+n=120:
+Demetrescu-Italiano: min: 31.0183, max: 213.0700, avg: 153.4595 [ms]
+Dijkstra: min: 32.0868, max: 52.4198, avg: 41.8830 [ms]
+Floyd-Warshall: min: 46.8951, max: 50.7887, avg: 47.6106 [ms]
+n=130:
+Demetrescu-Italiano: min: 35.2679, max: 253.3724, avg: 180.8009 [ms]
+Floyd-Warshall: min: 59.5084, max: 61.9052, avg: 60.4853 [ms]
+Dijkstra: min: 39.0640, max: 65.5613, avg: 53.0968 [ms]
+n=140:
+Floyd-Warshall: min: 74.4650, max: 78.1675, avg: 75.6914 [ms]
+Dijkstra: min: 48.5352, max: 76.6071, avg: 62.0126 [ms]
+Demetrescu-Italiano: min: 35.1611, max: 303.4208, avg: 214.8621 [ms]
+n=150:
+Demetrescu-Italiano: min: 49.5209, max: 427.6257, avg: 278.7694 [ms]
+Dijkstra: min: 54.3143, max: 83.2475, avg: 67.4111 [ms]
+Floyd-Warshall: min: 90.0632, max: 94.6602, avg: 91.7805 [ms]
+
+Random graphs with n=100 and growing density (m)
+m=45 (1% full):
+Floyd-Warshall: min: 24.3328, max: 29.0688, avg: 24.6620 [ms]
+Dijkstra: min: 0.8684, max: 2.2376, avg: 1.1954 [ms]
+Demetrescu-Italiano: min: 0.2201, max: 27.4010, avg: 6.2857 [ms]
+m=372 (8% full):
+Floyd-Warshall: min: 27.2331, max: 31.6113, avg: 28.7046 [ms]
+Demetrescu-Italiano: min: 19.3258, max: 143.4834, avg: 110.4381 [ms]
+Dijkstra: min: 16.0263, max: 58.8113, avg: 37.8884 [ms]
+m=699 (14% full):
+Demetrescu-Italiano: min: 24.6992, max: 169.9027, avg: 118.8500 [ms]
+Dijkstra: min: 36.3172, max: 100.2337, avg: 68.3216 [ms]
+Floyd-Warshall: min: 28.2286, max: 32.4078, avg: 29.2114 [ms]
+m=1026 (21% full):
+Dijkstra: min: 49.8877, max: 134.4959, avg: 90.6850 [ms]
+Floyd-Warshall: min: 29.4552, max: 34.5698, avg: 30.4828 [ms]
+Demetrescu-Italiano: min: 19.7477, max: 179.8210, avg: 118.9588 [ms]
+m=1353 (27% full):
+Demetrescu-Italiano: min: 19.5468, max: 173.1716, avg: 126.7684 [ms]
+Dijkstra: min: 65.6250, max: 174.4428, avg: 120.7874 [ms]
+Floyd-Warshall: min: 29.8651, max: 33.1464, avg: 30.6370 [ms]
+m=1680 (34% full):
+Floyd-Warshall: min: 29.5146, max: 32.6832, avg: 30.6992 [ms]
+Demetrescu-Italiano: min: 31.5216, max: 174.5794, avg: 123.9742 [ms]
+Dijkstra: min: 80.3341, max: 198.6034, avg: 141.7400 [ms]
+m=2007 (41% full):
+Demetrescu-Italiano: min: 25.2948, max: 168.2373, avg: 120.3562 [ms]
+Floyd-Warshall: min: 30.3887, max: 33.5257, avg: 30.9761 [ms]
+Dijkstra: min: 94.3364, max: 223.0503, avg: 162.4433 [ms]
+m=2334 (47% full):
+Dijkstra: min: 107.0045, max: 250.4314, avg: 185.8151 [ms]
+Floyd-Warshall: min: 30.7531, max: 34.0160, avg: 31.3153 [ms]
+Demetrescu-Italiano: min: 19.5816, max: 164.4109, avg: 122.2976 [ms]
+m=2661 (54% full):
+Dijkstra: min: 123.5373, max: 284.6198, avg: 204.2897 [ms]
+Floyd-Warshall: min: 30.8056, max: 34.0785, avg: 31.4007 [ms]
+Demetrescu-Italiano: min: 18.5178, max: 169.2411, avg: 119.0126 [ms]
+m=2988 (60% full):
+Floyd-Warshall: min: 31.0928, max: 35.1597, avg: 31.6896 [ms]
+Dijkstra: min: 140.7781, max: 299.6640, avg: 224.7684 [ms]
+Demetrescu-Italiano: min: 20.7130, max: 168.6808, avg: 121.8301 [ms]
+m=3315 (67% full):
+Dijkstra: min: 150.1339, max: 295.6824, avg: 228.3187 [ms]
+Demetrescu-Italiano: min: 24.1191, max: 162.9877, avg: 123.7927 [ms]
+Floyd-Warshall: min: 30.8581, max: 33.4217, avg: 31.4577 [ms]
+m=3642 (74% full):
+Dijkstra: min: 166.3805, max: 315.3925, avg: 251.3289 [ms]
+Demetrescu-Italiano: min: 24.1486, max: 148.9569, avg: 111.8126 [ms]
+Floyd-Warshall: min: 30.8804, max: 33.5580, avg: 31.2279 [ms]
+m=3969 (80% full):
+Floyd-Warshall: min: 30.8010, max: 32.2421, avg: 31.0377 [ms]
+Demetrescu-Italiano: min: 23.5046, max: 158.0215, avg: 113.7254 [ms]
+Dijkstra: min: 179.9221, max: 328.0351, avg: 262.1789 [ms]
+m=4296 (87% full):
+Dijkstra: min: 185.4298, max: 346.6469, avg: 275.7579 [ms]
+Demetrescu-Italiano: min: 21.3856, max: 161.5174, avg: 113.6410 [ms]
+Floyd-Warshall: min: 30.8649, max: 32.7565, avg: 31.1319 [ms]
+m=4623 (93% full):
+Dijkstra: min: 199.7437, max: 358.6608, avg: 285.1871 [ms]
+Floyd-Warshall: min: 31.0517, max: 32.2875, avg: 31.5320 [ms]
+Demetrescu-Italiano: min: 17.7825, max: 180.8964, avg: 113.5448 [ms]
+m=4950 (100% full):
+Floyd-Warshall: min: 30.8071, max: 31.9762, avg: 31.0735 [ms]
+Dijkstra: min: 208.3888, max: 356.8327, avg: 292.6355 [ms]
+Demetrescu-Italiano: min: 18.1462, max: 156.7245, avg: 114.0665 [ms]
+
+Clique with all equal weights (weight=1)
+n=10:
+Dijkstra: min: 0.2923, max: 0.3359, avg: 0.3000 [ms]
+Floyd-Warshall: min: 0.0346, max: 0.0620, avg: 0.0363 [ms]
+Demetrescu-Italiano: min: 0.8636, max: 5.1755, avg: 3.2316 [ms]
+n=20:
+Demetrescu-Italiano: min: 5.5775, max: 30.9167, avg: 20.9558 [ms]
+Floyd-Warshall: min: 0.2133, max: 0.3201, avg: 0.2184 [ms]
+Dijkstra: min: 2.7297, max: 3.1794, avg: 2.7487 [ms]
+n=30:
+Dijkstra: min: 10.0380, max: 10.4038, avg: 10.0997 [ms]
+Demetrescu-Italiano: min: 14.9906, max: 90.3070, avg: 57.9861 [ms]
+Floyd-Warshall: min: 0.6857, max: 0.8447, avg: 0.6967 [ms]
+n=40:
+Dijkstra: min: 25.3568, max: 26.3965, avg: 25.4670 [ms]
+Demetrescu-Italiano: min: 27.5349, max: 183.8492, avg: 124.8528 [ms]
+Floyd-Warshall: min: 1.5832, max: 1.9266, avg: 1.6046 [ms]
+n=50:
+Demetrescu-Italiano: min: 41.8291, max: 326.1145, avg: 228.0982 [ms]
+Dijkstra: min: 51.7737, max: 61.2766, avg: 52.2984 [ms]
+Floyd-Warshall: min: 3.0534, max: 3.4205, avg: 3.0808 [ms]
+n=60:
+Dijkstra: min: 91.6543, max: 94.6036, avg: 92.1272 [ms]
+Floyd-Warshall: min: 5.5318, max: 6.0225, avg: 5.6174 [ms]
+Demetrescu-Italiano: min: 75.0810, max: 521.4842, avg: 358.0049 [ms]
+n=70:
+Floyd-Warshall: min: 8.9708, max: 9.6758, avg: 9.0566 [ms]
+Demetrescu-Italiano: min: 89.0344, max: 791.8172, avg: 551.3005 [ms]
+Dijkstra: min: 153.0044, max: 182.0319, avg: 154.1499 [ms]
+n=80:
+Floyd-Warshall: min: 13.4051, max: 14.9266, avg: 13.5072 [ms]
+Demetrescu-Italiano: min: 117.6078, max: 1075.6586, avg: 795.6072 [ms]
+Dijkstra: min: 233.7199, max: 279.2716, avg: 235.2802 [ms]
+n=90:
+Dijkstra: min: 337.1106, max: 343.3694, avg: 338.2522 [ms]
+Floyd-Warshall: min: 19.0128, max: 20.3879, avg: 19.1472 [ms]
+Demetrescu-Italiano: min: 215.9106, max: 1424.0668, avg: 1029.3436 [ms]
+n=100:
+Demetrescu-Italiano: min: 197.9303, max: 1842.5112, avg: 1365.2150 [ms]
+Dijkstra: min: 481.3186, max: 580.6450, avg: 484.1968 [ms]
+Floyd-Warshall: min: 25.9721, max: 28.1075, avg: 26.3106 [ms]
+
+Random clique with all almost equal weights (weights in {1, 2})
+n=10:
+Floyd-Warshall: min: 0.0345, max: 0.0593, avg: 0.0379 [ms]
+Dijkstra: min: 0.3058, max: 0.4318, avg: 0.3197 [ms]
+Demetrescu-Italiano: min: 1.2519, max: 25.2302, avg: 2.7867 [ms]
+n=20:
+Demetrescu-Italiano: min: 2.9210, max: 19.1252, avg: 11.7579 [ms]
+Floyd-Warshall: min: 0.2143, max: 0.3384, avg: 0.2227 [ms]
+Dijkstra: min: 2.9143, max: 3.2459, avg: 2.9635 [ms]
+n=30:
+Floyd-Warshall: min: 0.6893, max: 0.9549, avg: 0.7122 [ms]
+Dijkstra: min: 10.7612, max: 11.5223, avg: 10.8440 [ms]
+Demetrescu-Italiano: min: 4.2838, max: 39.0329, avg: 26.3592 [ms]
+n=40:
+Demetrescu-Italiano: min: 23.1024, max: 84.6186, avg: 56.5555 [ms]
+Floyd-Warshall: min: 1.5691, max: 2.1249, avg: 1.6073 [ms]
+Dijkstra: min: 27.1638, max: 28.9153, avg: 27.5275 [ms]
+n=50:
+Dijkstra: min: 56.4184, max: 60.4855, avg: 56.8660 [ms]
+Floyd-Warshall: min: 3.0799, max: 3.4779, avg: 3.1153 [ms]
+Demetrescu-Italiano: min: 18.1187, max: 126.4279, avg: 84.5905 [ms]
+n=60:
+Floyd-Warshall: min: 5.8128, max: 6.2589, avg: 5.8711 [ms]
+Demetrescu-Italiano: min: 32.3058, max: 229.9870, avg: 135.7137 [ms]
+Dijkstra: min: 99.6342, max: 103.6100, avg: 100.5509 [ms]
+n=70:
+Floyd-Warshall: min: 9.3260, max: 10.2167, avg: 9.3721 [ms]
+Dijkstra: min: 167.5725, max: 173.6751, avg: 168.4032 [ms]
+Demetrescu-Italiano: min: 34.6434, max: 282.3655, avg: 204.3782 [ms]
+n=80:
+Demetrescu-Italiano: min: 45.7063, max: 378.6773, avg: 254.7580 [ms]
+Dijkstra: min: 251.3415, max: 260.6290, avg: 253.5214 [ms]
+Floyd-Warshall: min: 13.8177, max: 14.6771, avg: 13.9966 [ms]
+n=90:
+Dijkstra: min: 369.2491, max: 382.7755, avg: 370.9259 [ms]
+Floyd-Warshall: min: 19.2678, max: 20.4831, avg: 19.3895 [ms]
+Demetrescu-Italiano: min: 57.3159, max: 540.7488, avg: 360.2714 [ms]
+n=100:
+Dijkstra: min: 517.0106, max: 532.8372, avg: 519.5678 [ms]
+Floyd-Warshall: min: 26.5698, max: 28.1214, avg: 26.7526 [ms]
+Demetrescu-Italiano: min: 76.2186, max: 667.6559, avg: 450.3218 [ms]
+
+Pathological case triggering n^3 changes in locally shortest paths from paper (figure 4)
+layer size=10:
+Floyd-Warshall: min: 1.8230, max: 2.1036, avg: 1.8588 [ms]
+Dijkstra: min: 0.6234, max: 2.2592, avg: 1.3560 [ms]
+Demetrescu-Italiano: min: 1.8070, max: 4.2660, avg: 2.0697 [ms]
+layer size=20:
+Demetrescu-Italiano: min: 6.8879, max: 29.0072, avg: 8.3748 [ms]
+Floyd-Warshall: min: 14.8754, max: 16.2609, avg: 15.1671 [ms]
+Dijkstra: min: 2.7988, max: 16.0634, avg: 9.1109 [ms]
+layer size=30:
+Dijkstra: min: 6.5603, max: 52.7272, avg: 29.5436 [ms]
+Demetrescu-Italiano: min: 16.2899, max: 95.8345, avg: 19.9841 [ms]
+Floyd-Warshall: min: 47.0889, max: 48.7526, avg: 47.3387 [ms]
+layer size=40:
+Demetrescu-Italiano: min: 30.3805, max: 226.8658, avg: 38.5590 [ms]
+Floyd-Warshall: min: 109.0192, max: 111.9836, avg: 109.7351 [ms]
+Dijkstra: min: 12.8093, max: 127.4168, avg: 68.3834 [ms]
+layer size=50:
+Demetrescu-Italiano: min: 48.2981, max: 455.1239, avg: 59.5823 [ms]
+Floyd-Warshall: min: 209.2822, max: 217.9209, avg: 210.7299 [ms]
+Dijkstra: min: 22.0859, max: 252.2475, avg: 134.9348 [ms]
+layer size=60:
+Floyd-Warshall: min: 361.8644, max: 386.0960, avg: 365.4746 [ms]
+Demetrescu-Italiano: min: 77.7100, max: 826.1357, avg: 94.3844 [ms]
+Dijkstra: min: 36.2736, max: 450.7632, avg: 239.8062 [ms]
+layer size=70:
+Dijkstra: min: 53.3290, max: 739.2914, avg: 389.1058 [ms]
+Demetrescu-Italiano: min: 106.3562, max: 1419.3325, avg: 132.4455 [ms]
+Floyd-Warshall: min: 578.4421, max: 608.3645, avg: 585.5795 [ms]
+layer size=80:
+Dijkstra: min: 71.9274, max: 1073.6680, avg: 566.1255 [ms]
+Demetrescu-Italiano: min: 142.6334, max: 2053.2045, avg: 178.5480 [ms]
+Floyd-Warshall: min: 894.8028, max: 949.1981, avg: 912.1115 [ms]
+layer size=90:
+Demetrescu-Italiano: min: 186.1369, max: 3177.9087, avg: 236.0094 [ms]
+Dijkstra: min: 88.3953, max: 1508.9697, avg: 793.8863 [ms]
+Floyd-Warshall: min: 1394.6913, max: 1490.6686, avg: 1422.4025 [ms]
+layer size=100:
+Demetrescu-Italiano: min: 231.8921, max: 4639.8260, avg: 300.4927 [ms]
+Dijkstra: min: 107.5748, max: 2185.7274, avg: 1128.7380 [ms]
+Floyd-Warshall: min: 2162.3936, max: 2366.7024, avg: 2212.1091 [ms]
+
+Worst-case instance with n^3 historical paths from paper (figure 6)
+layer size=10:
+Demetrescu-Italiano: min: 3.0736, max: 13.8389, avg: 9.5098 [ms]
+Floyd-Warshall: min: 5.9767, max: 6.1232, avg: 6.0560 [ms]
+Dijkstra: min: 1.4265, max: 1.7258, avg: 1.5496 [ms]
+layer size=20:
+Dijkstra: min: 6.2980, max: 8.6453, avg: 6.9002 [ms]
+Floyd-Warshall: min: 45.2425, max: 47.0882, avg: 45.5143 [ms]
+Demetrescu-Italiano: min: 11.6231, max: 63.5899, avg: 45.5046 [ms]
+layer size=30:
+Floyd-Warshall: min: 149.7200, max: 153.4933, avg: 150.1989 [ms]
+Dijkstra: min: 15.4974, max: 21.6936, avg: 16.7817 [ms]
+Demetrescu-Italiano: min: 31.2256, max: 180.2296, avg: 124.2718 [ms]
+layer size=40:
+Dijkstra: min: 30.2857, max: 40.7407, avg: 33.1675 [ms]
+Floyd-Warshall: min: 355.6044, max: 366.6480, avg: 358.7260 [ms]
+Demetrescu-Italiano: min: 56.5279, max: 367.7977, avg: 263.2558 [ms]
+layer size=50:
+Demetrescu-Italiano: min: 95.9998, max: 625.6402, avg: 471.5565 [ms]
+Dijkstra: min: 51.0540, max: 66.3291, avg: 57.7345 [ms]
+Floyd-Warshall: min: 710.8474, max: 737.4782, avg: 719.4568 [ms]
+layer size=60:
+Demetrescu-Italiano: min: 142.6036, max: 928.3574, avg: 741.4818 [ms]
+Dijkstra: min: 86.1629, max: 103.3868, avg: 93.2953 [ms]
+Floyd-Warshall: min: 1354.6784, max: 1429.6076, avg: 1376.2005 [ms]
+layer size=70:
+Demetrescu-Italiano: min: 173.5222, max: 1531.0998, avg: 1082.1239 [ms]
+Dijkstra: min: 117.9684, max: 141.7249, avg: 130.2546 [ms]
+Floyd-Warshall: min: 2622.5139, max: 3304.0667, avg: 2702.8065 [ms]

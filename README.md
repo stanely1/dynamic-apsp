@@ -1,6 +1,6 @@
 # Fully-Dynamic All-Pairs Shortest Paths
 
-# TODO
+## TODO
 - [ ] framework
     - [x] budowanie - cmake, makefile, ...
     - [x] struktury:
@@ -23,3 +23,6 @@
     - [ ] optymalizacja dla grafów rzadkich - ostateczna wersja
 - [ ] w pracach jest, żeby co jakiś czas restartować strukturę od zera, żeby się amortyzowało
 - [x] dodać możliwość inicjalizacji algorytmów dla danego grafu (a nie tylko dla pustego)
+
+## Correctness tests
+![](assets/correctness_pass.png)
