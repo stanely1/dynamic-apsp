@@ -2,6 +2,7 @@
 #include <algorithms/DemetrescuItalianoAlgorithm.hpp>
 #include <algorithms/DijkstraAlgorithm.hpp>
 #include <algorithms/FloydWarshallAlgorithm.hpp>
+#include <algorithms/ThorupAlgorithm.hpp>
 #include <generator/TestGenerator.hpp>
 #include <algorithm>
 #include <cassert>
@@ -38,6 +39,8 @@ AlgorithmList initializeAlgorithms(const apsp::common::Graph& graph)
     result.push_back(std::make_unique<FloydWarshallAlgorithm>(graph));
     result.push_back(std::make_unique<DijkstraAlgorithm>(graph));
     result.push_back(std::make_unique<DemetrescuItalianoAlgorithm>(graph));
+    // TODO: debug
+    // result.push_back(std::make_unique<ThorupAlgorithm>(graph));
 
     static std::random_device rd;
     static std::mt19937 rng(rd());
@@ -98,6 +101,7 @@ bool verifyOutput(const int updateNum, const TestInput& input, const AlgorithmLi
                                     "Mismatch in output for ({}, {}) after update {}:\n{} (baseline): {}\n{}: {}\n",
                                     x, y, updateNum, BASELINE_NAME, baselineOutput, algorithm->name(), algorithmOutput);
                     printInput(input);
+                    // exit(EXIT_FAILURE);
                     return false;
                 }
             }
@@ -246,7 +250,8 @@ void runPerformanceBenchmark(const TestInput& input)
 
 void runPerformanceBenchmarks(const std::optional<TestGenerator::RngSeed>& seed)
 {
-    std::cout << std::format("BASELINE: {}\nMeasuring time per update\n\n", BASELINE_NAME);
+    constexpr std::uint32_t numUpdates{100u};
+    std::cout << std::format("BASELINE: {}\nMeasuring time per update ({} updates per testcase)\n\n", BASELINE_NAME, numUpdates);
 
     auto generator{seed.has_value() ? TestGenerator(seed.value()) : TestGenerator{}};
 
@@ -256,7 +261,7 @@ void runPerformanceBenchmarks(const std::optional<TestGenerator::RngSeed>& seed)
     {
         std::cerr << std::format("n={}:\n", n);
         std::cout << std::format("n={}:\n", n);
-        runPerformanceBenchmark(generator.getRandomUndirectedTree(n, 100, 0, n));
+        runPerformanceBenchmark(generator.getRandomUndirectedTree(n, numUpdates, 0, n));
     }
     std::cerr << '\n';
     std::cout << '\n';
@@ -267,7 +272,7 @@ void runPerformanceBenchmarks(const std::optional<TestGenerator::RngSeed>& seed)
     {
         std::cerr << std::format("n={}:\n", n);
         std::cout << std::format("n={}:\n", n);
-        runPerformanceBenchmark(generator.getRandomTest(n, 5*n, 100, 0, 5));
+        runPerformanceBenchmark(generator.getRandomTest(n, 5*n, numUpdates, 0, 5));
     }
     std::cerr << '\n';
     std::cout << '\n';
@@ -278,7 +283,7 @@ void runPerformanceBenchmarks(const std::optional<TestGenerator::RngSeed>& seed)
     {
         std::cerr << std::format("m={} ({:.0f}\% full):\n", m, static_cast<double>(m)/4950*100);
         std::cout << std::format("m={} ({:.0f}\% full):\n", m, static_cast<double>(m)/4950*100);
-        runPerformanceBenchmark(generator.getRandomTest(100, m, 100, 0, 3*m/100));
+        runPerformanceBenchmark(generator.getRandomTest(100, m, numUpdates, 0, 3*m/100));
     }
     std::cerr << '\n';
     std::cout << '\n';
@@ -289,7 +294,7 @@ void runPerformanceBenchmarks(const std::optional<TestGenerator::RngSeed>& seed)
     {
         std::cerr << std::format("n={}:\n", n);
         std::cout << std::format("n={}:\n", n);
-        runPerformanceBenchmark(generator.getEqualWeightClique(n, 100, 0, n, 1));
+        runPerformanceBenchmark(generator.getEqualWeightClique(n, numUpdates, 0, n, 1));
     }
     std::cerr << '\n';
     std::cout << '\n';
@@ -300,7 +305,7 @@ void runPerformanceBenchmarks(const std::optional<TestGenerator::RngSeed>& seed)
     {
         std::cerr << std::format("n={}:\n", n);
         std::cout << std::format("n={}:\n", n);
-        runPerformanceBenchmark(generator.getRandomClique(n, 100, 0, n, 1, 2));
+        runPerformanceBenchmark(generator.getRandomClique(n, numUpdates, 0, n, 1, 2));
     }
     std::cerr << '\n';
     std::cout << '\n';
@@ -311,7 +316,7 @@ void runPerformanceBenchmarks(const std::optional<TestGenerator::RngSeed>& seed)
     {
         std::cerr << std::format("layer size={}:\n", n);
         std::cout << std::format("layer size={}:\n", n);
-        runPerformanceBenchmark(generator.getPathologicalTestForLocallyShortestPathsFromPaper(n, 100));
+        runPerformanceBenchmark(generator.getPathologicalTestForLocallyShortestPathsFromPaper(n, numUpdates));
     }
     std::cerr << '\n';
     std::cout << '\n';

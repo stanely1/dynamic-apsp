@@ -1,6 +1,8 @@
 #include <algorithms/FloydWarshallAlgorithm.hpp>
 #include <common/Constants.hpp>
 
+// #include <iostream>
+
 namespace apsp::algorithms
 {
 
@@ -88,6 +90,18 @@ void FloydWarshallAlgorithm::update(common::Vertex v, const common::VertexToWeig
             }
         }
     }
+
+    // std::cerr << "BASELINE SHORTEST PATHS:\n";
+    // for (common::Vertex x{0u}; x < n; ++x)
+    // {
+    //     std::cerr << x << ": ";
+    //     for (common::Vertex y{0u}; y < n; ++y)
+    //     {
+    //         std::cerr << distance(x, y) << ' ';
+    //     }
+    //     std::cerr << '\n';
+    // }
+    // std::cerr << '\n';
 }
 
 void FloydWarshallAlgorithm::initializeShortestPaths()

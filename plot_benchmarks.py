@@ -24,11 +24,13 @@ ALGO_COLORS = {
     "Floyd-Warshall":      "#2196F3",   # blue
     "Dijkstra":            "#4CAF50",   # green
     "Demetrescu-Italiano": "#FF5722",   # deep-orange
+    # "Thorup":              "#510000",   # dark-red
 }
 ALGO_MARKERS = {
     "Floyd-Warshall":      "o",
     "Dijkstra":            "s",
     "Demetrescu-Italiano": "^",
+    # "Thorup":              "x",
 }
 
 METRIC_STYLES = {

@@ -4,6 +4,7 @@ add_library(algorithms
     DemetrescuItalianoAlgorithm.cpp
     DijkstraAlgorithm.cpp
     FloydWarshallAlgorithm.cpp
+    ThorupAlgorithm.cpp
 )
 
 target_include_directories(algorithms
