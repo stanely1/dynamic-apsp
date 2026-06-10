@@ -1,19 +1,10 @@
 # Fully-Dynamic All-Pairs Shortest Paths
 
 ## TODO
-- [ ] framework
-    - [x] budowanie - cmake, makefile, ...
-    - [x] struktury:
-        - [x] graph
-        - [x] path
-    - [x] klasa bazowa abstrakcyjna (interfejs) dla algorytmów (?)
-    - [ ] formatter (clang-format) (optional)
-    - [x] generowanie i uruchamianie testów, porówynwanie wyników
-    - [ ] unit testy na poprawność (?) (klas graph, path, ...)
-- [ ] brute
+- [x] brute
     - [x] Floyd-Warshall (O(n^3))
-    - [x] Dijkstra (z std::priority_queue)
-    - [ ] Dijkstra z Fibonacci Heap (optional?)
+    - [x] Dijkstra (z `std::priority_queue`)
+    - [ ] Dijkstra z Fibonacci Heap (optional)
 - [x] praca Italiano,Demetrescu
     - [x] tie breaking
     - [x] wariant fully-dynamic
@@ -21,9 +12,11 @@
 - [ ] praca Thorup
     - [ ] podział na poziomy - wersja O(n^2 log^2(n))
         - [ ] debug
-    - [ ] optymalizacja dla grafów rzadkich - ostateczna wersja
+    - [ ] optymalizacja dla grafów rzadkich
 - [ ] w pracach jest, żeby co jakiś czas restartować strukturę od zera, żeby się amortyzowało
-- [x] dodać możliwość inicjalizacji algorytmów dla danego grafu (a nie tylko dla pustego)
+- [ ] test z losowymi wagami typu `double` (żeby były unikalne długości ścieżek)
+- [ ] odpalić testy z większym n (>1000 ?) - zobaczyć, czy i kiedy pokonamy brute
+- [ ] formatter (clang-format) (optional)
 
 ## Correctness Tests
 ![](assets/correctness_pass.png)
